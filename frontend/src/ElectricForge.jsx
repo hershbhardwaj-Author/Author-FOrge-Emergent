@@ -833,14 +833,15 @@ const useMagnetForm = (source) => {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!email.includes("@")) {
-      setErr("Please enter a valid email.");
+    const trimmed = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setErr("Please enter a valid email address.");
       return;
     }
     setBusy(true);
     setErr(null);
     try {
-      const res = await axios.post(`${API}/leads`, { source, email });
+      const res = await axios.post(`${API}/leads`, { source, email: trimmed });
       const msg = res.data?.message || "Thank you.";
       const dl = res.data?.download_url;
       setDone(msg);
@@ -885,7 +886,7 @@ const CurriculumBriefStrip = () => {
               </span>
             </h3>
           </div>
-          <form onSubmit={submit} className="flex items-end gap-4 w-full">
+          <form onSubmit={submit} noValidate className="flex items-end gap-4 w-full">
             <div className="flex-1 min-w-0">
               <label htmlFor="lm-curriculum-email" className="eyebrow block mb-2">Your Email</label>
               <input
@@ -945,7 +946,7 @@ const SpecimenCard = () => {
             A finished chapter from a Forge author — typeset, edited, ready for print. Read the standard before you commit to the residency. Sent once, never followed up unless you ask.
           </p>
 
-          <form onSubmit={submit} className="mt-10 flex items-end gap-4">
+          <form onSubmit={submit} noValidate className="mt-10 flex items-end gap-4">
             <div className="flex-1 min-w-0">
               <label htmlFor="lm-specimen-email" className="eyebrow block mb-2">Send the specimen to</label>
               <input
@@ -1010,7 +1011,7 @@ const QuietListBand = () => {
           </p>
         </div>
 
-        <form onSubmit={submit} className="lg:border-l hairline lg:pl-12">
+        <form onSubmit={submit} noValidate className="lg:border-l hairline lg:pl-12">
           <label htmlFor="lm-quiet-email" className="eyebrow block mb-3">Subscribe — Quarterly</label>
           <div className="flex items-end gap-4">
             <input

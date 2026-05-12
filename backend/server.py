@@ -12,7 +12,7 @@ from typing import List, Literal, Optional
 import uuid
 from datetime import datetime, timezone
 
-from pdf_generator import generate_curriculum_brief_pdf, generate_specimen_chapter_pdf
+from pdf_generator import generate_curriculum_brief_pdf, generate_specimen_chapter_pdf, _ensure_fonts
 
 
 ROOT_DIR = Path(__file__).parent
@@ -163,6 +163,14 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+
+@app.on_event("startup")
+async def warm_fonts():
+    try:
+        _ensure_fonts()
+    except Exception as e:
+        logger.warning(f"Font pre-warm failed: {e}")
 
 
 @app.on_event("shutdown")

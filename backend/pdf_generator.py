@@ -28,7 +28,8 @@ BRONZE_DP  = HexColor("#9A6520")
 RULE       = Color(26/255, 24/255, 19/255, 0.18)
 RULE_SOFT  = Color(26/255, 24/255, 19/255, 0.10)
 
-# ── Font registration (Fraunces + Inter Tight via Google Fonts, cached on disk) ─
+# ── Font registration (Fraunces + Inter Tight bundled with the app) ──────────
+BUNDLED_FONTS = Path(__file__).parent / "assets" / "fonts"
 FONTS_DIR = Path("/tmp/forge_fonts")
 FONTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -45,28 +46,34 @@ _FONTS_READY = False
 _FONT_NAMES = None
 
 
-def _ensure_fonts():
-    """Download Fraunces + Inter Tight if absent. Return tuple of registered font names."""
-    global _FONTS_READY, _FONT_NAMES
-    if _FONTS_READY and _FONT_NAMES:
-        return _FONT_NAMES
-    for name, url in FONT_URLS.items():
-        path = FONTS_DIR / f"{name}.ttf"
-        if not path.exists() or path.stat().st_size < 10000:
+def _resolve_font(name: str) -> Path:
+    """Prefer bundled font in /assets/fonts; fall back to downloading to /tmp."""
+    bundled = BUNDLED_FONTS / f"{name}.ttf"
+    if bundled.exists() and bundled.stat().st_size > 10000:
+        return bundled
+    cached = FONTS_DIR / f"{name}.ttf"
+    if not cached.exists() or cached.stat().st_size < 10000:
+        url = FONT_URLS.get(name)
+        if url:
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
                 with urllib.request.urlopen(req, timeout=15) as r:
-                    path.write_bytes(r.read())
+                    cached.write_bytes(r.read())
             except Exception as e:
                 print(f"[pdf] Font download failed {name}: {e}")
+    return cached
+
+
+def _ensure_fonts():
+    """Register Fraunces + Inter Tight. Return tuple of registered font names."""
+    global _FONTS_READY, _FONT_NAMES
+    if _FONTS_READY and _FONT_NAMES:
+        return _FONT_NAMES
     try:
-        # Variable fonts require subfontIndex=0 or just direct register
-        pdfmetrics.registerFont(TTFont("Fraunces", str(FONTS_DIR / "Fraunces-Regular.ttf")))
-        pdfmetrics.registerFont(TTFont("Fraunces-Italic", str(FONTS_DIR / "Fraunces-Italic.ttf")))
-        pdfmetrics.registerFont(TTFont("InterTight", str(FONTS_DIR / "InterTight-Regular.ttf")))
-        # Same TTF file used for "SemiBold" display; reportlab won't synthesize weight from variable fonts
-        # but the file's default instance is fine for display use.
-        pdfmetrics.registerFont(TTFont("Fraunces-Display", str(FONTS_DIR / "Fraunces-Regular.ttf")))
+        pdfmetrics.registerFont(TTFont("Fraunces", str(_resolve_font("Fraunces-Regular"))))
+        pdfmetrics.registerFont(TTFont("Fraunces-Italic", str(_resolve_font("Fraunces-Italic"))))
+        pdfmetrics.registerFont(TTFont("InterTight", str(_resolve_font("InterTight-Regular"))))
+        pdfmetrics.registerFont(TTFont("Fraunces-Display", str(_resolve_font("Fraunces-Regular"))))
         _FONT_NAMES = ("Fraunces-Display", "Fraunces", "Fraunces-Italic", "InterTight")
         print("[pdf] Custom fonts registered")
     except Exception as e:
