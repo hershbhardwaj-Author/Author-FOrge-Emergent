@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import axios from "axios";
 import {
   X, Triangle, Users, Calendar, Video, Phone, Library,
   FileText, BookOpen, Megaphone, Globe, ArrowRight, ArrowUpRight,
   Check, Sparkles, Feather, Zap, Star, Quote, Flame
 } from "lucide-react";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 /* ──────────────────────────────────────────────────────────────────────────────
    Editorial Ornament Components
@@ -40,16 +43,48 @@ const FolioNumber = ({ n }) => (
    ─────────────────────────────────────────────────────────────────────────── */
 
 const ApplyDrawer = ({ open, onClose }) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(null);
+  const [err, setErr] = useState(null);
+
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  const submit = (e) => {
+  useEffect(() => {
+    if (!open) {
+      setDone(null);
+      setErr(null);
+    }
+  }, [open]);
+
+  const submit = async (e) => {
     e.preventDefault();
-    alert("Application received. We review every submission within 48 hours.");
-    onClose();
+    const form = e.currentTarget;
+    const payload = {
+      name: form["af-name"].value.trim(),
+      email: form["af-email"].value.trim(),
+      expertise: form["af-expertise"].value,
+      concept: form["af-concept"].value.trim(),
+      stage: form["af-stage"].value || "",
+    };
+    setSubmitting(true);
+    setErr(null);
+    try {
+      const res = await axios.post(`${API}/applications`, payload);
+      setDone(res.data.message || "Application received.");
+      form.reset();
+    } catch (e2) {
+      const detail = e2?.response?.data?.detail;
+      setErr(
+        Array.isArray(detail) ? detail.map(d => d.msg).join(" · ") :
+        (typeof detail === "string" ? detail : "Submission failed. Please try again.")
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -121,10 +156,20 @@ const ApplyDrawer = ({ open, onClose }) => {
               </select>
             </Field>
 
-            <button type="submit" data-testid="apply-submit" className="btn-primary mt-2 w-full">
-              <span>Submit Application</span>
+            <button type="submit" data-testid="apply-submit" disabled={submitting} className="btn-primary mt-2 w-full disabled:opacity-60 disabled:cursor-not-allowed">
+              <span>{submitting ? "Submitting…" : "Submit Application"}</span>
               <Feather size={14} strokeWidth={1.4} className="relative -mt-px" />
             </button>
+            {done && (
+              <p data-testid="apply-success" className="text-sm italic text-[var(--ia-forest)] text-center mt-2">
+                ✦ {done}
+              </p>
+            )}
+            {err && (
+              <p data-testid="apply-error" className="text-sm italic text-red-700 text-center mt-2">
+                {err}
+              </p>
+            )}
             <p className="text-xs italic text-[var(--ia-ink-mute)] text-center mt-2">
               Applications reviewed within 48 hours. No spam — ever.
             </p>
@@ -780,25 +825,50 @@ const FinalCTA = ({ onApply }) => (
    in a print journal, not repeated forms.
    ─────────────────────────────────────────────────────────────────────────── */
 
-const useMagnetForm = (label) => {
+const useMagnetForm = (source) => {
   const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
-  const submit = (e) => {
+  const [done, setDone] = useState(null);
+  const [err, setErr] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e) => {
     e.preventDefault();
-    if (!email.includes("@")) return;
-    setDone(true);
-    setEmail("");
-    setTimeout(() => setDone(false), 5000);
-    // MOCKED — would POST to /api/leads with { source: label, email }
+    if (!email.includes("@")) {
+      setErr("Please enter a valid email.");
+      return;
+    }
+    setBusy(true);
+    setErr(null);
+    try {
+      const res = await axios.post(`${API}/leads`, { source, email });
+      const msg = res.data?.message || "Thank you.";
+      const dl = res.data?.download_url;
+      setDone(msg);
+      setEmail("");
+      if (dl) {
+        // Auto-open the PDF in a new tab
+        const fullUrl = `${process.env.REACT_APP_BACKEND_URL}${dl}`;
+        window.open(fullUrl, "_blank", "noopener,noreferrer");
+      }
+      setTimeout(() => setDone(null), 8000);
+    } catch (e2) {
+      const detail = e2?.response?.data?.detail;
+      setErr(
+        Array.isArray(detail) ? detail.map(d => d.msg).join(" · ") :
+        (typeof detail === "string" ? detail : "Submission failed. Please try again.")
+      );
+    } finally {
+      setBusy(false);
+    }
   };
-  return { email, setEmail, done, submit };
+  return { email, setEmail, done, err, busy, submit };
 };
 
 /* Variant A — The Curriculum Brief
    Placed between Journey and Decision. A slim full-width editorial ribbon
    with rule-above / rule-below, inline email input. Reads as a print masthead inset. */
 const CurriculumBriefStrip = () => {
-  const { email, setEmail, done, submit } = useMagnetForm("curriculum-brief");
+  const { email, setEmail, done, err, busy, submit } = useMagnetForm("curriculum-brief");
   return (
     <section data-testid="leadmagnet-curriculum" className="bg-[var(--ia-ivory)] border-y hairline">
       <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-14 sm:py-16">
@@ -831,9 +901,10 @@ const CurriculumBriefStrip = () => {
             </div>
             <button
               type="submit"
+              disabled={busy}
               data-testid="leadmagnet-curriculum-submit"
               aria-label="Request brief"
-              className="shrink-0 h-11 w-11 border border-[var(--ia-ink)] flex items-center justify-center text-[var(--ia-ink)] hover:bg-[var(--ia-ink)] hover:text-[var(--ia-ivory-warm)]"
+              className="shrink-0 h-11 w-11 border border-[var(--ia-ink)] flex items-center justify-center text-[var(--ia-ink)] hover:bg-[var(--ia-ink)] hover:text-[var(--ia-ivory-warm)] disabled:opacity-50"
             >
               <ArrowRight size={14} strokeWidth={1.3} />
             </button>
@@ -841,7 +912,12 @@ const CurriculumBriefStrip = () => {
         </div>
         {done && (
           <p data-testid="leadmagnet-curriculum-success" className="mt-6 text-sm italic text-[var(--ia-forest)]">
-            ✦ Thank you — your copy of the brief is on its way.
+            ✦ {done} Your brief is opening in a new tab.
+          </p>
+        )}
+        {err && (
+          <p data-testid="leadmagnet-curriculum-error" className="mt-6 text-sm italic text-red-700">
+            {err}
           </p>
         )}
       </div>
@@ -853,7 +929,7 @@ const CurriculumBriefStrip = () => {
    Placed between Portfolio (deliverables) and Program. An asymmetric tipped-in
    "card" that mimics a book specimen folio with serif drop-cap and rule. */
 const SpecimenCard = () => {
-  const { email, setEmail, done, submit } = useMagnetForm("specimen-page");
+  const { email, setEmail, done, err, busy, submit } = useMagnetForm("specimen-page");
   return (
     <section data-testid="leadmagnet-specimen" className="bg-[var(--ia-ivory)] py-20 sm:py-28 px-6 sm:px-12 lg:px-20 border-b hairline">
       <div className="max-w-[1480px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -885,17 +961,23 @@ const SpecimenCard = () => {
             </div>
             <button
               type="submit"
+              disabled={busy}
               data-testid="leadmagnet-specimen-submit"
-              className="btn-ghost shrink-0"
+              className="btn-ghost shrink-0 disabled:opacity-50"
             >
-              <span>Receive</span>
+              <span>{busy ? "Sending…" : "Receive"}</span>
               <ArrowRight size={14} strokeWidth={1.3} />
             </button>
           </form>
 
           {done && (
             <p data-testid="leadmagnet-specimen-success" className="mt-5 text-sm italic text-[var(--ia-forest)]">
-              ✦ Sent. Check your inbox in the next few minutes.
+              ✦ {done} Opening the specimen now.
+            </p>
+          )}
+          {err && (
+            <p data-testid="leadmagnet-specimen-error" className="mt-5 text-sm italic text-red-700">
+              {err}
             </p>
           )}
 
@@ -914,7 +996,7 @@ const SpecimenCard = () => {
    Placed between Diagnostic and Final CTA. A quiet two-column band for those
    not ready to apply yet — quarterly editorial notes. Lower visual weight. */
 const QuietListBand = () => {
-  const { email, setEmail, done, submit } = useMagnetForm("quiet-list");
+  const { email, setEmail, done, err, busy, submit } = useMagnetForm("quiet-list");
   return (
     <section data-testid="leadmagnet-quietlist" className="bg-[var(--ia-ivory-deep)] border-b hairline">
       <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -943,15 +1025,20 @@ const QuietListBand = () => {
             />
             <button
               type="submit"
+              disabled={busy}
               data-testid="leadmagnet-quiet-submit"
-              className="shrink-0 h-11 px-6 bg-[var(--ia-forest)] text-[var(--ia-ivory-warm)] text-[11px] tracking-[0.28em] uppercase hover:bg-[var(--ia-forest-deep)]"
+              className="shrink-0 h-11 px-6 bg-[var(--ia-forest)] text-[var(--ia-ivory-warm)] text-[11px] tracking-[0.28em] uppercase hover:bg-[var(--ia-forest-deep)] disabled:opacity-60"
             >
-              Subscribe
+              {busy ? "…" : "Subscribe"}
             </button>
           </div>
           {done ? (
             <p data-testid="leadmagnet-quiet-success" className="mt-4 text-sm italic text-[var(--ia-forest)]">
-              ✦ You're on the Quiet List. First dispatch arrives next quarter.
+              ✦ {done}
+            </p>
+          ) : err ? (
+            <p data-testid="leadmagnet-quiet-error" className="mt-4 text-sm italic text-red-700">
+              {err}
             </p>
           ) : (
             <p className="mt-4 text-xs italic text-[var(--ia-ink-mute)]">

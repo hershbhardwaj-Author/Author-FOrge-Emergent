@@ -1,0 +1,46 @@
+{
+  "summary": "Tested all 4 forms (curriculum/specimen/quiet-list magnets + apply drawer) and 2 PDF endpoints end-to-end. Backend 14/14 pytest pass. Frontend critical flows all wire to /api/* and return 200; previously-working interactions (tabs, reveal, deliverables, countdown, marquee) intact.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Magnet inline validation",
+        "issue": "When an invalid email is typed, the browser's native HTML5 type=email blocks form submit, so the inline [data-testid=leadmagnet-*-error] never appears. The test request 'Invalid email in any magnet shows an inline error' is satisfied only by the browser bubble, not by an in-page styled error. Consider adding a regex pre-check in submit() to render the styled inline error to match the design language.",
+        "affected_selectors": ["leadmagnet-curriculum-error", "leadmagnet-specimen-error", "leadmagnet-quiet-error"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_forge_api.py",
+    "/app/test_reports/pytest/forge_api.xml"
+  ],
+  "action_items": [
+    "(Optional / cosmetic) Add a lightweight client-side email-regex check inside useMagnetForm.submit so the styled inline error appears instead of (or in addition to) the browser's native validation bubble.",
+    "(Optional naming nit) Section testid is 'leadmagnet-quietlist' but the input/submit/success/error use the prefix 'leadmagnet-quiet-'. Curriculum and Specimen are consistent (all 'leadmagnet-curriculum-*'). Consider standardising the quiet-list prefix for clarity."
+  ],
+  "critical_code_review_comments": [
+    "server.py: /api/leads response includes download_url=null for quiet-list — matches spec ✓",
+    "server.py: list_leads and list_applications already exclude _id via projection ✓",
+    "PDF endpoints: curriculum brief PDF measured ~ well over 30 KB and starts with %PDF magic bytes ✓ Specimen PDF also valid PDF.",
+    "pdf_generator.py: downloads remote Google Fonts at runtime with a 15s timeout — first request to /api/leads/curriculum-brief.pdf may be slow on cold start; subsequent calls cached in /tmp/forge_fonts. Consider bundling fonts in repo or moving _ensure_fonts() into application startup to avoid first-hit latency.",
+    "ElectricForge.jsx (1091 lines): file exceeds the 700-line guideline. Split into ApplyDrawer.jsx, leadmagnets/*, sections/* for maintainability.",
+    "API base uses process.env.REACT_APP_BACKEND_URL ✓ and all forms post via axios with proper try/catch + busy/error/success states ✓",
+    "All interactive elements have data-testid ✓"
+  ],
+  "updated_files": [
+    "/app/backend/tests/__init__.py (new)",
+    "/app/backend/tests/test_forge_api.py (new)"
+  ],
+  "success_rate": {"backend": "100% (14/14)", "frontend": "100% on functional flows (5/5); 0/1 on styled inline-error for invalid email — HTML5 bubble handles it instead"},
+  "test_credentials": "none required (public endpoints)",
+  "seed_data_creation": "Tests created several TEST_-prefixed leads and one TEST_-prefixed application in MongoDB during the run. Not cleaned up (no DELETE endpoint exists); volume is negligible.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "All 4 forms wired and verified at https://elite-visual-refresh.preview.emergentagent.com/electric-forge. Quiet list selectors use the prefix 'leadmagnet-quiet-' (input/submit/success/error) while the surrounding section uses 'leadmagnet-quietlist'. Curriculum/specimen prefixes are consistent ('leadmagnet-curriculum-*', 'leadmagnet-specimen-*'). PDF endpoints download fonts on first call; expect ~5-10s on cold start, sub-second afterward.",
+  "rca of the issue": "No blocking bugs found. The only spec deviation is that 'inline error on invalid email' relies on HTML5 native validation rather than the styled <p data-testid=leadmagnet-*-error>. Root cause: useMagnetForm.submit() only sets `err` from server responses (try/catch around axios.post); since HTML5 'required + type=email' aborts submit before fetch, setErr is never called. Fix: in submit(), before axios.post, run a regex check on email and call setErr('Please enter a valid email address.') + return early if invalid."
+}
