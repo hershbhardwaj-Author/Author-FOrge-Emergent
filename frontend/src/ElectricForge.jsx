@@ -775,6 +775,196 @@ const FinalCTA = ({ onApply }) => (
 );
 
 /* ──────────────────────────────────────────────────────────────────────────────
+   Lead Magnets — three editorial inserts at strategic inflection points.
+   Each has its own visual personality so they feel like tipped-in cards
+   in a print journal, not repeated forms.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+const useMagnetForm = (label) => {
+  const [email, setEmail] = useState("");
+  const [done, setDone] = useState(false);
+  const submit = (e) => {
+    e.preventDefault();
+    if (!email.includes("@")) return;
+    setDone(true);
+    setEmail("");
+    setTimeout(() => setDone(false), 5000);
+    // MOCKED — would POST to /api/leads with { source: label, email }
+  };
+  return { email, setEmail, done, submit };
+};
+
+/* Variant A — The Curriculum Brief
+   Placed between Journey and Decision. A slim full-width editorial ribbon
+   with rule-above / rule-below, inline email input. Reads as a print masthead inset. */
+const CurriculumBriefStrip = () => {
+  const { email, setEmail, done, submit } = useMagnetForm("curriculum-brief");
+  return (
+    <section data-testid="leadmagnet-curriculum" className="bg-[var(--ia-ivory)] border-y hairline">
+      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-14 sm:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1.4fr_1fr] items-center gap-10 lg:gap-16">
+          <div className="flex items-center gap-6">
+            <span className="font-display tabular text-[11px] tracking-[0.4em] text-[var(--ia-bronze-deep)] uppercase shrink-0">Tipped-in № i</span>
+            <span className="leader-dots hidden lg:block" />
+          </div>
+          <div>
+            <h3 className="font-display text-[28px] sm:text-[36px] leading-[1.05]">
+              The <em className="font-display-italic">Curriculum Brief</em>
+              <span className="block text-[15px] sm:text-base italic text-[var(--ia-ink-mute)] mt-2 not-italic">
+                A six-page editorial breakdown of the five-month residency. By post or PDF.
+              </span>
+            </h3>
+          </div>
+          <form onSubmit={submit} className="flex items-end gap-4 w-full">
+            <div className="flex-1 min-w-0">
+              <label htmlFor="lm-curriculum-email" className="eyebrow block mb-2">Your Email</label>
+              <input
+                id="lm-curriculum-email"
+                data-testid="leadmagnet-curriculum-email"
+                type="email"
+                required
+                placeholder="name@firm.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="atelier-input"
+              />
+            </div>
+            <button
+              type="submit"
+              data-testid="leadmagnet-curriculum-submit"
+              aria-label="Request brief"
+              className="shrink-0 h-11 w-11 border border-[var(--ia-ink)] flex items-center justify-center text-[var(--ia-ink)] hover:bg-[var(--ia-ink)] hover:text-[var(--ia-ivory-warm)]"
+            >
+              <ArrowRight size={14} strokeWidth={1.3} />
+            </button>
+          </form>
+        </div>
+        {done && (
+          <p data-testid="leadmagnet-curriculum-success" className="mt-6 text-sm italic text-[var(--ia-forest)]">
+            ✦ Thank you — your copy of the brief is on its way.
+          </p>
+        )}
+      </div>
+    </section>
+  );
+};
+
+/* Variant B — The Specimen Page
+   Placed between Portfolio (deliverables) and Program. An asymmetric tipped-in
+   "card" that mimics a book specimen folio with serif drop-cap and rule. */
+const SpecimenCard = () => {
+  const { email, setEmail, done, submit } = useMagnetForm("specimen-page");
+  return (
+    <section data-testid="leadmagnet-specimen" className="bg-[var(--ia-ivory)] py-20 sm:py-28 px-6 sm:px-12 lg:px-20 border-b hairline">
+      <div className="max-w-[1480px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="lg:col-span-4 lg:col-start-2">
+          <Eyebrow className="text-[var(--ia-bronze-deep)]">Tipped-in № ii</Eyebrow>
+          <h3 className="mt-5 font-display text-[40px] sm:text-[52px] leading-[0.95]">
+            A <em className="font-display-italic text-[var(--ia-forest)]">specimen page</em>, in your inbox.
+          </h3>
+        </div>
+
+        <div className="lg:col-span-6 lg:col-start-7 lg:pl-12 lg:border-l hairline">
+          <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)] first-letter:font-display first-letter:text-[64px] first-letter:leading-[0.85] first-letter:float-left first-letter:pr-3 first-letter:pt-1 first-letter:text-[var(--ia-bronze-deep)]">
+            A finished chapter from a Forge author — typeset, edited, ready for print. Read the standard before you commit to the residency. Sent once, never followed up unless you ask.
+          </p>
+
+          <form onSubmit={submit} className="mt-10 flex items-end gap-4">
+            <div className="flex-1 min-w-0">
+              <label htmlFor="lm-specimen-email" className="eyebrow block mb-2">Send the specimen to</label>
+              <input
+                id="lm-specimen-email"
+                data-testid="leadmagnet-specimen-email"
+                type="email"
+                required
+                placeholder="reader@yourname.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="atelier-input"
+              />
+            </div>
+            <button
+              type="submit"
+              data-testid="leadmagnet-specimen-submit"
+              className="btn-ghost shrink-0"
+            >
+              <span>Receive</span>
+              <ArrowRight size={14} strokeWidth={1.3} />
+            </button>
+          </form>
+
+          {done && (
+            <p data-testid="leadmagnet-specimen-success" className="mt-5 text-sm italic text-[var(--ia-forest)]">
+              ✦ Sent. Check your inbox in the next few minutes.
+            </p>
+          )}
+
+          <div className="mt-10 flex items-center gap-4 text-[var(--ia-ink-mute)]">
+            <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Folio</span>
+            <span className="leader-dots" />
+            <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Sample · 12 pp</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* Variant C — The Quiet List
+   Placed between Diagnostic and Final CTA. A quiet two-column band for those
+   not ready to apply yet — quarterly editorial notes. Lower visual weight. */
+const QuietListBand = () => {
+  const { email, setEmail, done, submit } = useMagnetForm("quiet-list");
+  return (
+    <section data-testid="leadmagnet-quietlist" className="bg-[var(--ia-ivory-deep)] border-b hairline">
+      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <Eyebrow className="text-[var(--ia-bronze-deep)]">Tipped-in № iii · For Authors-in-Waiting</Eyebrow>
+          <h3 className="mt-5 font-display text-[32px] sm:text-[44px] leading-[1.02]">
+            The <em className="font-display-italic">Quiet List.</em>
+          </h3>
+          <p className="mt-5 text-[var(--ia-ink-soft)] italic leading-relaxed max-w-md">
+            Four editorial dispatches a year. Notes on craft, positioning, and the publishing economy — sent only to those who'd rather watch the cohort cycle first.
+          </p>
+        </div>
+
+        <form onSubmit={submit} className="lg:border-l hairline lg:pl-12">
+          <label htmlFor="lm-quiet-email" className="eyebrow block mb-3">Subscribe — Quarterly</label>
+          <div className="flex items-end gap-4">
+            <input
+              id="lm-quiet-email"
+              data-testid="leadmagnet-quiet-email"
+              type="email"
+              required
+              placeholder="you@yourcompany.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="atelier-input"
+            />
+            <button
+              type="submit"
+              data-testid="leadmagnet-quiet-submit"
+              className="shrink-0 h-11 px-6 bg-[var(--ia-forest)] text-[var(--ia-ivory-warm)] text-[11px] tracking-[0.28em] uppercase hover:bg-[var(--ia-forest-deep)]"
+            >
+              Subscribe
+            </button>
+          </div>
+          {done ? (
+            <p data-testid="leadmagnet-quiet-success" className="mt-4 text-sm italic text-[var(--ia-forest)]">
+              ✦ You're on the Quiet List. First dispatch arrives next quarter.
+            </p>
+          ) : (
+            <p className="mt-4 text-xs italic text-[var(--ia-ink-mute)]">
+              No promotions. No sequences. Unsubscribe instantly.
+            </p>
+          )}
+        </form>
+      </div>
+    </section>
+  );
+};
+
+/* ──────────────────────────────────────────────────────────────────────────────
    Root
    ─────────────────────────────────────────────────────────────────────────── */
 
@@ -800,10 +990,13 @@ export default function ElectricForge() {
       <Marquee />
       <div className="reveal-in"><CountdownSection onApply={onApply} /></div>
       <div className="reveal-in"><JourneySection /></div>
+      <div className="reveal-in"><CurriculumBriefStrip /></div>
       <div className="reveal-in"><DecisionSection /></div>
       <div className="reveal-in"><PortfolioSection /></div>
+      <div className="reveal-in"><SpecimenCard /></div>
       <div className="reveal-in"><ProgramSection /></div>
       <div className="reveal-in"><DiagnosticSection onApply={onApply} /></div>
+      <div className="reveal-in"><QuietListBand /></div>
       <div className="reveal-in"><FinalCTA onApply={onApply} /></div>
     </div>
   );
