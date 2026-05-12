@@ -1,0 +1,300 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Ivory Atelier Theme Tokens */
+  --ia-ivory: #F5EFE2;
+  --ia-ivory-deep: #EFE7D4;
+  --ia-ivory-warm: #FBF7EE;
+  --ia-ink: #1A1813;
+  --ia-ink-soft: #3A3528;
+  --ia-ink-mute: #5A523F;
+  --ia-forest: #2B3F2E;
+  --ia-forest-deep: #1F2E22;
+  --ia-bronze: #A8814C;
+  --ia-bronze-deep: #7E5E33;
+  --ia-rule: rgba(26, 24, 19, 0.16);
+  --ia-rule-soft: rgba(26, 24, 19, 0.08);
+
+  /* shadcn fallback tokens */
+  --background: 40 36% 92%;
+  --foreground: 36 14% 9%;
+  --card: 40 36% 95%;
+  --card-foreground: 36 14% 9%;
+  --popover: 40 36% 95%;
+  --popover-foreground: 36 14% 9%;
+  --primary: 130 18% 21%;
+  --primary-foreground: 40 36% 95%;
+  --secondary: 40 22% 84%;
+  --secondary-foreground: 36 14% 9%;
+  --muted: 40 22% 86%;
+  --muted-foreground: 36 12% 35%;
+  --accent: 35 38% 48%;
+  --accent-foreground: 40 36% 95%;
+  --destructive: 0 50% 40%;
+  --destructive-foreground: 40 36% 95%;
+  --border: 36 14% 9%;
+  --input: 36 14% 9%;
+  --ring: 130 18% 21%;
+  --radius: 0px;
+}
+
+html, body, #root {
+  background: var(--ia-ivory);
+  color: var(--ia-ink);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Paper grain texture overlay */
+.paper-grain {
+  position: relative;
+}
+.paper-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    radial-gradient(rgba(26, 24, 19, 0.045) 1px, transparent 1px),
+    radial-gradient(rgba(26, 24, 19, 0.03) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 2px;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+/* Editorial serif display */
+.font-display {
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
+  font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 0;
+  font-feature-settings: "ss01", "ss03", "liga";
+  letter-spacing: -0.02em;
+}
+
+.font-display-italic {
+  font-family: 'Fraunces', ui-serif, Georgia, serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 1;
+}
+
+.eyebrow {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ia-ink-mute);
+}
+
+.hairline {
+  border-color: var(--ia-rule);
+}
+
+.rule {
+  height: 1px;
+  background: var(--ia-rule);
+}
+
+/* Subtle hover transitions */
+a, button, input, select, textarea {
+  transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Custom selection */
+::selection {
+  background: var(--ia-forest);
+  color: var(--ia-ivory-warm);
+}
+
+/* Marquee */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Ornament: dotted leader */
+.leader-dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--ia-rule);
+  margin: 0 0.75rem 0.3em 0.75rem;
+}
+
+/* Reveal animation entrance */
+.reveal-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-in.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Form refinements */
+.atelier-input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ia-rule);
+  padding: 14px 0;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 16px;
+  color: var(--ia-ink);
+  outline: none;
+}
+.atelier-input::placeholder {
+  color: rgba(26, 24, 19, 0.32);
+}
+.atelier-input:focus {
+  border-bottom-color: var(--ia-forest);
+}
+.atelier-input:focus + .input-underline-fx,
+.atelier-input:focus ~ .input-underline-fx {
+  transform: scaleX(1);
+}
+
+select.atelier-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%231A1813' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  padding-right: 24px;
+}
+
+textarea.atelier-input {
+  resize: none;
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  padding: 18px 36px;
+  background: var(--ia-ink);
+  color: var(--ia-ivory-warm);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  border: 1px solid var(--ia-ink);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ia-forest);
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+}
+.btn-primary:hover::after { transform: translateY(0); }
+.btn-primary > * { position: relative; z-index: 1; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 14px 24px;
+  border: 1px solid var(--ia-rule);
+  color: var(--ia-ink);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: transparent;
+}
+.btn-ghost:hover {
+  border-color: var(--ia-ink);
+  background: rgba(26, 24, 19, 0.04);
+}
+
+/* Number/stat ticker */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hide scrollbar inside drawer */
+.no-scrollbar::-webkit-scrollbar { width: 6px; }
+.no-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.no-scrollbar::-webkit-scrollbar-thumb { background: var(--ia-rule); }
+
+/* Ornament glyph rotation */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow { animation: spin-slow 32s linear infinite; }
+
+/* Subtle reveal block fade */
+@keyframes blockFade {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.block-fade { animation: blockFade 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Tab underline */
+.tab-underline {
+  position: relative;
+}
+.tab-underline::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: var(--ia-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tab-underline.is-active::after,
+.tab-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* Image-like ornament rules */
+.rule-ornament {
+  position: relative;
+  height: 1px;
+  background: var(--ia-rule);
+}
+.rule-ornament::after {
+  content: "✦";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--ia-ivory);
+  padding: 0 18px;
+  color: var(--ia-bronze);
+  font-size: 12px;
+}
+
+/* Smooth scroll for in-page anchors */
+html { scroll-behavior: smooth; }
+
+@layer base {
+  * { border-color: var(--ia-rule); }
+  body { @apply bg-ivory-100 text-ink; }
+}

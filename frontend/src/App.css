@@ -1,0 +1,6 @@
+/* Page-level resets */
+.App {
+  background: var(--ia-ivory);
+  color: var(--ia-ink);
+  min-height: 100vh;
+}
