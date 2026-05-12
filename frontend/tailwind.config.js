@@ -36,10 +36,10 @@ module.exports = {
           tint: '#D9E0D6',
         },
         bronze: {
-          DEFAULT: '#A8814C',
-          deep: '#7E5E33',
-          warm: '#B89262',
-          tint: '#E6D6BC',
+          DEFAULT: '#C28A3F',
+          deep: '#9A6520',
+          warm: '#D49E54',
+          tint: '#EFD8B5',
         },
         // Tailwind utility tokens (preserve shadcn semantics if used)
         background: '#F5EFE2',
