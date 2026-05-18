@@ -2,6 +2,80 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 const API = `/api`;
+const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD;
+const SESSION_KEY = "af_admin_authed";
+
+function LoginGate({ onAuth }) {
+  const [input, setInput] = useState("");
+  const [error, setError] = useState(false);
+  const [shake, setShake] = useState(false);
+
+  const attempt = (e) => {
+    e.preventDefault();
+    if (input === ADMIN_PASSWORD) {
+      sessionStorage.setItem(SESSION_KEY, "1");
+      onAuth();
+    } else {
+      setError(true);
+      setShake(true);
+      setInput("");
+      setTimeout(() => setShake(false), 500);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[var(--ia-ivory)] flex items-center justify-center">
+      <div className="w-full max-w-sm px-8">
+        <div className="text-center mb-10">
+          <p className="text-[10px] tracking-[0.4em] uppercase text-[var(--ia-bronze)] mb-3">Admin Access</p>
+          <h1 className="font-display text-3xl italic text-[var(--ia-ink)]">The Author's Forge</h1>
+          <div className="h-px w-16 bg-[var(--ia-bronze)] mx-auto mt-4" />
+        </div>
+
+        <form onSubmit={attempt} className={shake ? "animate-[wiggle_0.4s_ease-in-out]" : ""}>
+          <label className="block text-[10px] tracking-[0.3em] uppercase text-[var(--ia-ink-mute)] mb-2">
+            Password
+          </label>
+          <input
+            type="password"
+            value={input}
+            onChange={(e) => { setInput(e.target.value); setError(false); }}
+            autoFocus
+            className={`w-full border px-4 py-3 bg-transparent text-[var(--ia-ink)] outline-none text-sm transition-colors ${
+              error ? "border-red-400" : "border-[var(--ia-rule)] focus:border-[var(--ia-ink)]"
+            }`}
+            placeholder="Enter password"
+          />
+          {error && (
+            <p className="text-red-500 text-xs mt-2 tracking-wide">Incorrect password.</p>
+          )}
+          <button
+            type="submit"
+            className="w-full mt-5 bg-[var(--ia-forest)] text-[var(--ia-ivory)] py-3 text-[11px] tracking-[0.3em] uppercase hover:bg-[var(--ia-forest-deep)] transition-colors"
+          >
+            Enter
+          </button>
+        </form>
+
+        <p className="text-center mt-8">
+          <a href="/" className="text-[10px] tracking-widest uppercase text-[var(--ia-ink-mute)] hover:text-[var(--ia-ink)] transition-colors">
+            ← Back to Site
+          </a>
+        </p>
+      </div>
+
+      <style>{`
+        @keyframes wiggle {
+          0%, 100% { transform: translateX(0); }
+          20% { transform: translateX(-8px); }
+          40% { transform: translateX(8px); }
+          60% { transform: translateX(-6px); }
+          80% { transform: translateX(6px); }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 const fmt = (iso) => {
   if (!iso) return "—";
@@ -41,7 +115,7 @@ const StatCard = ({ label, value }) => (
   </div>
 );
 
-export default function AdminDashboard() {
+function Dashboard() {
   const [leads, setLeads] = useState([]);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -214,4 +288,16 @@ export default function AdminDashboard() {
       </main>
     </div>
   );
+}
+
+export default function AdminDashboard() {
+  const [authed, setAuthed] = useState(
+    () => sessionStorage.getItem(SESSION_KEY) === "1"
+  );
+
+  if (!authed) {
+    return <LoginGate onAuth={() => setAuthed(true)} />;
+  }
+
+  return <Dashboard />;
 }
