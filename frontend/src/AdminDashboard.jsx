@@ -142,6 +142,45 @@ function Dashboard() {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
+  const downloadCSV = useCallback((rows, columns, filename) => {
+    const escape = (v) => {
+      const s = v == null ? "" : String(v);
+      return s.includes(",") || s.includes('"') || s.includes("\n")
+        ? `"${s.replace(/"/g, '""')}"`
+        : s;
+    };
+    const header = columns.map((c) => escape(c.label)).join(",");
+    const body = rows.map((r) => columns.map((c) => escape(r[c.key])).join(",")).join("\n");
+    const blob = new Blob([`${header}\n${body}`], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const exportLeads = useCallback(() => {
+    downloadCSV(leads, [
+      { key: "email", label: "Email" },
+      { key: "source", label: "Source" },
+      { key: "created_at", label: "Captured At" },
+      { key: "id", label: "ID" },
+    ], `authors-forge-leads-${new Date().toISOString().slice(0,10)}.csv`);
+  }, [leads, downloadCSV]);
+
+  const exportApplications = useCallback(() => {
+    downloadCSV(applications, [
+      { key: "name", label: "Name" },
+      { key: "email", label: "Email" },
+      { key: "expertise", label: "Expertise" },
+      { key: "stage", label: "Stage" },
+      { key: "concept", label: "Book Concept" },
+      { key: "created_at", label: "Submitted At" },
+      { key: "id", label: "ID" },
+    ], `authors-forge-applications-${new Date().toISOString().slice(0,10)}.csv`);
+  }, [applications, downloadCSV]);
+
   const leadsBySource = leads.reduce((acc, l) => {
     acc[l.source] = (acc[l.source] || 0) + 1;
     return acc;
@@ -186,20 +225,32 @@ function Dashboard() {
         )}
 
         {/* Tab switcher */}
-        <div className="flex gap-0 border-b border-[var(--ia-rule)] mb-6">
-          {["leads", "applications"].map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-6 py-3 text-[11px] tracking-[0.25em] uppercase transition-colors border-b-2 -mb-px ${
-                tab === t
-                  ? "border-[var(--ia-forest)] text-[var(--ia-ink)] font-semibold"
-                  : "border-transparent text-[var(--ia-ink-mute)] hover:text-[var(--ia-ink)]"
-              }`}
-            >
-              {t === "leads" ? `Leads (${leads.length})` : `Applications (${applications.length})`}
-            </button>
-          ))}
+        <div className="flex items-center justify-between border-b border-[var(--ia-rule)] mb-6">
+          <div className="flex gap-0">
+            {["leads", "applications"].map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`px-6 py-3 text-[11px] tracking-[0.25em] uppercase transition-colors border-b-2 -mb-px ${
+                  tab === t
+                    ? "border-[var(--ia-forest)] text-[var(--ia-ink)] font-semibold"
+                    : "border-transparent text-[var(--ia-ink-mute)] hover:text-[var(--ia-ink)]"
+                }`}
+              >
+                {t === "leads" ? `Leads (${leads.length})` : `Applications (${applications.length})`}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={tab === "leads" ? exportLeads : exportApplications}
+            disabled={tab === "leads" ? leads.length === 0 : applications.length === 0}
+            className="mb-1 flex items-center gap-2 border border-[var(--ia-rule)] px-4 py-2 text-[10px] tracking-[0.25em] uppercase text-[var(--ia-ink-mute)] hover:border-[var(--ia-bronze)] hover:text-[var(--ia-bronze)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M6 1v7M3 5.5l3 3 3-3M1 9.5v1h10v-1" />
+            </svg>
+            Export CSV
+          </button>
         </div>
 
         {/* Leads table */}
