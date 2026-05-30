@@ -22,7 +22,79 @@ load_dotenv(ROOT_DIR / '.env')
 DATABASE_URL = os.environ['DATABASE_URL']
 resend.api_key = os.environ.get('RESEND_API_KEY', '')
 
-RESEND_FROM = "The Author's Forge <onboarding@resend.dev>"
+RESEND_FROM  = "The Author's Forge <onboarding@resend.dev>"
+ADMIN_EMAIL  = os.environ.get("ADMIN_EMAIL", "hersh.bhardwaj@gmail.com")
+
+
+def _send_admin_application_email(application):
+    """Notify admin of a new application. Non-fatal on failure."""
+    try:
+        resend.Emails.send({
+            "from": RESEND_FROM,
+            "to": [ADMIN_EMAIL],
+            "subject": f"New Application — {application.name} | The Author's Forge",
+            "html": f"""
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#f9f6f0;font-family:Georgia,'Times New Roman',serif;color:#1a1a1a;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f6f0;padding:40px 24px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#faf8f3;border:1px solid #d4c9b0;">
+        <tr>
+          <td style="background:#1a1a1a;padding:24px 40px;">
+            <p style="margin:0;font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:#c9a96e;">
+              The Author's Forge · New Application
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:36px 40px 20px;">
+            <h1 style="margin:0 0 6px;font-size:26px;font-weight:400;">
+              {application.name}
+            </h1>
+            <p style="margin:0;font-size:13px;color:#8a7a5a;">{application.email}</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 40px 36px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #d4c9b0;margin-bottom:20px;">
+              <tr>
+                <td style="padding:16px 0 0;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:#8a7a5a;width:160px;vertical-align:top;">Expertise</td>
+                <td style="padding:16px 0 0;font-size:14px;color:#1a1a1a;vertical-align:top;">{application.expertise}</td>
+              </tr>
+              <tr>
+                <td style="padding:14px 0 0;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:#8a7a5a;vertical-align:top;">Stage</td>
+                <td style="padding:14px 0 0;font-size:14px;color:#1a1a1a;vertical-align:top;">{application.stage or "—"}</td>
+              </tr>
+              <tr>
+                <td style="padding:14px 0 0;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:#8a7a5a;vertical-align:top;">Concept</td>
+                <td style="padding:14px 0 0;font-size:14px;line-height:1.7;color:#1a1a1a;vertical-align:top;">{application.concept}</td>
+              </tr>
+              <tr>
+                <td style="padding:14px 0 0;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:#8a7a5a;vertical-align:top;">Submitted</td>
+                <td style="padding:14px 0 0;font-size:14px;color:#1a1a1a;vertical-align:top;">{application.created_at}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 40px 28px;border-top:1px solid #d4c9b0;">
+            <p style="margin:0;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:#a09070;">
+              Review within 48 hours · Five-month residency · By application only
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+""",
+        })
+        logger.info(f"Admin notified of new application from {application.email}")
+    except Exception as e:
+        logger.warning(f"Admin notification email failed: {e}")
 
 
 def _send_curriculum_brief_email(to_email: str, pdf_url: str):
@@ -219,6 +291,8 @@ async def create_application(payload: ApplicationIn):
             application.expertise, application.concept, application.stage or "",
             application.created_at
         )
+    if resend.api_key:
+        _send_admin_application_email(application)
     return {
         "id": application.id,
         "message": "Application received. Our editorial board reviews every submission within 48 hours.",

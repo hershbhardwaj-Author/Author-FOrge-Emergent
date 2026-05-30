@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import {
   X, Triangle, Users, Calendar, Video, Phone, Library,
@@ -798,10 +799,19 @@ const FinalCTA = ({ onApply }) => (
         Join a curated group of high-achieving experts. Spots are strictly limited to 10–12 authors per cohort.
       </p>
 
-      <button data-testid="button-apply-cta" onClick={onApply} className="btn-primary mt-12 px-14 py-6">
-        <span>Apply for the Next Cohort</span>
-        <Feather size={14} strokeWidth={1.3} />
-      </button>
+      <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button data-testid="button-apply-cta" onClick={onApply} className="btn-primary px-14 py-5">
+          <span>Apply for the Next Cohort</span>
+          <Feather size={14} strokeWidth={1.3} />
+        </button>
+        <Link
+          to="/investment"
+          className="flex items-center gap-3 h-[52px] px-10 bg-[var(--ia-ink)] text-[var(--ia-ivory-warm)] text-[11px] tracking-[0.28em] uppercase hover:bg-[var(--ia-forest)] transition-colors duration-300"
+        >
+          <span>View Investment</span>
+          <ArrowRight size={13} strokeWidth={1.3} />
+        </Link>
+      </div>
 
       <div className="mt-6 eyebrow">Applications reviewed within 48 hours</div>
     </div>
