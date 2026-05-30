@@ -257,6 +257,11 @@ const CountdownSection = ({ onApply }) => {
         {/* Masthead */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-10 border-b hairline">
           <div>
+            <img
+              src="/logo.png"
+              alt="The Author's Forge · Electric"
+              className="h-16 sm:h-20 w-auto mb-6 object-contain"
+            />
             <Eyebrow>The Author's Forge · Electric Cohort</Eyebrow>
             <h1 className="mt-4 font-display text-[44px] sm:text-[62px] leading-[0.95]">
               From idea to <em className="font-display-italic text-[var(--ia-forest)]">published author</em><br />
@@ -993,60 +998,85 @@ const SpecimenCard = () => {
   );
 };
 
-/* Variant C — The Quiet List
-   Placed between Diagnostic and Final CTA. A quiet two-column band for those
-   not ready to apply yet — quarterly editorial notes. Lower visual weight. */
-const QuietListBand = () => {
-  const { email, setEmail, done, err, busy, submit } = useMagnetForm("quiet-list");
-  return (
-    <section data-testid="leadmagnet-quietlist" className="bg-[var(--ia-ivory-deep)] border-b hairline">
-      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <Eyebrow className="text-[var(--ia-bronze-deep)]">Tipped-in № iii · For Authors-in-Waiting</Eyebrow>
-          <h3 className="mt-5 font-display text-[32px] sm:text-[44px] leading-[1.02]">
-            The <em className="font-display-italic">Quiet List.</em>
-          </h3>
-          <p className="mt-5 text-[var(--ia-ink-soft)] italic leading-relaxed max-w-md">
-            Four editorial dispatches a year. Notes on craft, positioning, and the publishing economy — sent only to those who'd rather watch the cohort cycle first.
-          </p>
-        </div>
+/* ──────────────────────────────────────────────────────────────────────────────
+   FAQ Section
+   ─────────────────────────────────────────────────────────────────────────── */
 
-        <form onSubmit={submit} noValidate className="lg:border-l hairline lg:pl-12">
-          <label htmlFor="lm-quiet-email" className="eyebrow block mb-3">Subscribe — Quarterly</label>
-          <div className="flex items-end gap-4">
-            <input
-              id="lm-quiet-email"
-              data-testid="leadmagnet-quiet-email"
-              type="email"
-              required
-              placeholder="you@yourcompany.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="atelier-input"
-            />
-            <button
-              type="submit"
-              disabled={busy}
-              data-testid="leadmagnet-quiet-submit"
-              className="shrink-0 h-11 px-6 bg-[var(--ia-forest)] text-[var(--ia-ivory-warm)] text-[11px] tracking-[0.28em] uppercase hover:bg-[var(--ia-forest-deep)] disabled:opacity-60"
-            >
-              {busy ? "…" : "Subscribe"}
-            </button>
+const FAQS = [
+  {
+    q: "Who actually writes the manuscript?",
+    a: "You do — every word. Our editorial team structures your thinking, challenges your arguments, and refines your prose through five months of intensive feedback. The voice, the ideas, and the authority on the page are entirely yours."
+  },
+  {
+    q: "What kind of expert is The Forge designed for?",
+    a: "The Forge is built for high-achieving professionals — consultants, executives, coaches, and domain specialists — who have a body of knowledge worth publishing and a business that a book would directly advance. We are not a general creative writing programme."
+  },
+  {
+    q: "Do I need writing experience?",
+    a: "No. Many of our authors have never written long-form before. What you need is deep expertise and the discipline to show up. Our editorial process is designed to extract and shape ideas from people who think clearly, not people who already write fluently."
+  },
+  {
+    q: "What is the weekly time commitment?",
+    a: "Plan for eight to twelve hours per week across writing, masterclasses, and editorial sessions. The residency is intensive by design — a published book in five months requires real investment. Authors who treat it as a side project do not finish on schedule."
+  },
+  {
+    q: "What does 'guaranteed publishing' mean?",
+    a: "Every author who completes the residency walks away with a finished, professionally typeset book — distributed in print and digital formats across major retail channels. There is no additional publishing fee beyond your residency investment."
+  },
+  {
+    q: "How are cohort spots allocated?",
+    a: "Each cohort is capped at ten to twelve authors. Spots are awarded by our editorial board based on the strength of your application — specifically your expertise, your book concept, and your readiness to commit. We do not operate a waitlist; when the cohort fills, applications close."
+  },
+  {
+    q: "What happens after the five months?",
+    a: "You receive a published book, a marketing blueprint, and ongoing access to The Author's Portal. The editorial relationship does not end at month five — we support your launch window and remain available for strategic counsel as your book begins to work in your market."
+  },
+  {
+    q: "What is the investment?",
+    a: "Residency pricing is shared during the application review. The Forge is a premium programme and priced accordingly. If you are accepted and the investment is not workable, we will tell you plainly rather than pressure you into a decision."
+  },
+];
+
+const FAQSection = () => {
+  const [open, setOpen] = useState(null);
+  return (
+    <section data-testid="section-faq" className="bg-[var(--ia-ivory-deep)] border-b hairline">
+      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-16">
+          <div>
+            <FolioNumber n={6} />
+            <h2 className="mt-6 font-display text-[44px] sm:text-[64px] leading-[0.95]">
+              Frequently<br /><em className="font-display-italic text-[var(--ia-forest)]">asked.</em>
+            </h2>
+            <div className="mt-10 w-16"><RuleOrnament glyph="✦" /></div>
           </div>
-          {done ? (
-            <p data-testid="leadmagnet-quiet-success" className="mt-4 text-sm italic text-[var(--ia-forest)]">
-              ✦ {done}
-            </p>
-          ) : err ? (
-            <p data-testid="leadmagnet-quiet-error" className="mt-4 text-sm italic text-red-700">
-              {err}
-            </p>
-          ) : (
-            <p className="mt-4 text-xs italic text-[var(--ia-ink-mute)]">
-              No promotions. No sequences. Unsubscribe instantly.
-            </p>
-          )}
-        </form>
+          <div className="divide-y hairline">
+            {FAQS.map((item, i) => {
+              const isOpen = open === i;
+              return (
+                <div key={i} className="group">
+                  <button
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    className="w-full flex items-start justify-between gap-8 py-7 text-left"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-display text-[20px] sm:text-[24px] leading-tight text-[var(--ia-ink)] group-hover:text-[var(--ia-forest)] transition-colors duration-300">
+                      {item.q}
+                    </span>
+                    <span className={`shrink-0 mt-1 w-6 h-6 border hairline rounded-full flex items-center justify-center text-[var(--ia-ink-mute)] transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`}>
+                      <ArrowUpRight size={12} strokeWidth={1.3} />
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="block-fade pb-8 pr-14">
+                      <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)]">{item.a}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -1084,7 +1114,7 @@ export default function ElectricForge() {
       <div className="reveal-in"><SpecimenCard /></div>
       <div className="reveal-in"><ProgramSection /></div>
       <div className="reveal-in"><DiagnosticSection onApply={onApply} /></div>
-      <div className="reveal-in"><QuietListBand /></div>
+      <div className="reveal-in"><FAQSection /></div>
       <div className="reveal-in"><FinalCTA onApply={onApply} /></div>
     </div>
   );

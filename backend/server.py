@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Literal, Optional
 import uuid
 from datetime import datetime, timezone
+import resend
 
 from pdf_generator import generate_curriculum_brief_pdf, generate_specimen_chapter_pdf, _ensure_fonts
 
@@ -19,6 +20,69 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 DATABASE_URL = os.environ['DATABASE_URL']
+resend.api_key = os.environ.get('RESEND_API_KEY', '')
+
+RESEND_FROM = "The Author's Forge <onboarding@resend.dev>"
+
+
+def _send_curriculum_brief_email(to_email: str, pdf_url: str):
+    """Send curriculum brief autoresponder via Resend. Non-fatal on failure."""
+    try:
+        resend.Emails.send({
+            "from": RESEND_FROM,
+            "to": [to_email],
+            "subject": "Your Curriculum Brief — The Author's Forge · Electric",
+            "html": f"""
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f9f6f0;font-family:Georgia,'Times New Roman',serif;color:#1a1a1a;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f6f0;padding:48px 24px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#faf8f3;border:1px solid #d4c9b0;">
+        <tr>
+          <td style="padding:40px 48px 32px;border-bottom:1px solid #d4c9b0;">
+            <p style="margin:0 0 6px;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:#8a7a5a;">The Author's Forge · Electric</p>
+            <h1 style="margin:0;font-size:32px;font-weight:400;line-height:1.05;">The <em>Curriculum Brief</em></h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:36px 48px;">
+            <p style="margin:0 0 20px;font-size:16px;line-height:1.7;color:#3a3530;">
+              Thank you for your interest in The Author's Forge. Your six-page editorial breakdown of the five-month residency is ready.
+            </p>
+            <p style="margin:0 0 32px;font-size:16px;line-height:1.7;color:#3a3530;">
+              Click the button below to open your copy of the brief. It walks through every phase of the residency, the editorial standard we hold, and exactly what you'll walk away with after five months.
+            </p>
+            <table cellpadding="0" cellspacing="0"><tr><td>
+              <a href="{pdf_url}"
+                 style="display:inline-block;padding:14px 32px;background:#2d4a35;color:#faf8f3;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;">
+                Open the Brief
+              </a>
+            </td></tr></table>
+            <p style="margin:32px 0 0;font-size:13px;line-height:1.7;color:#8a7a5a;font-style:italic;">
+              If the button doesn't open, copy this link into your browser:<br>
+              <span style="color:#2d4a35;">{pdf_url}</span>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:24px 48px;border-top:1px solid #d4c9b0;">
+            <p style="margin:0;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:#a09070;">
+              Five-month residency · By application only · 10–12 authors per cohort
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+""",
+        })
+        logger.info(f"Curriculum brief email sent to {to_email}")
+    except Exception as e:
+        logger.warning(f"Resend email failed for {to_email}: {e}")
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -114,11 +178,19 @@ async def create_lead(payload: LeadIn):
             "INSERT INTO leads (id, source, email, created_at) VALUES ($1, $2, $3, $4)",
             lead.id, lead.source, lead.email, lead.created_at
         )
+    download_url = LEAD_DOWNLOAD_MAP.get(lead.source)
+    if lead.source == "curriculum-brief" and download_url and resend.api_key:
+        base_url = os.environ.get("REPLIT_DEV_DOMAIN", "")
+        if base_url:
+            pdf_url = f"https://{base_url}{download_url}"
+        else:
+            pdf_url = download_url
+        _send_curriculum_brief_email(lead.email, pdf_url)
     return {
         "id": lead.id,
         "source": lead.source,
-        "download_url": LEAD_DOWNLOAD_MAP.get(lead.source),
-        "message": "Thank you — your copy is on its way." if LEAD_DOWNLOAD_MAP.get(lead.source) else
+        "download_url": download_url,
+        "message": "Thank you — your copy is on its way." if download_url else
                    "You're on the Quiet List. First dispatch arrives next quarter.",
     }
 
