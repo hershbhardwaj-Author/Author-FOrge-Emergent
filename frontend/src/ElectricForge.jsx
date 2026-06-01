@@ -74,8 +74,8 @@ const ApplyDrawer = ({ open, onClose }) => {
     setSubmitting(true);
     setErr(null);
     try {
-      const res = await axios.post(`${API}/applications`, payload);
-      setDone(res.data.message || "Application received.");
+      const res = await axios.post(`https://little-morning-4803.hersh-bhardwaj.workers.dev/`, payload);
+      setDone("Application received.");
       form.reset();
     } catch (e2) {
       const detail = e2?.response?.data?.detail;
