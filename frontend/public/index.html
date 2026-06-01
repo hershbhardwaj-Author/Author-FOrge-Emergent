@@ -13,5 +13,35 @@
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  var form = document.querySelector('form');
+  if (!form) return;
+  
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
+    var originalText = btn ? btn.textContent : 'Submit';
+    if (btn) btn.textContent = 'Sending...';
+    
+    var data = {};
+    form.querySelectorAll('input, textarea, select').forEach(function(el) {
+      if (el.name) data[el.name] = el.value;
+    });
+    
+    try {
+      await fetch('https://little-morning-4803.hersh-bhardwaj.workers.dev/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      form.innerHTML = '<p style="color:green; font-size:18px; text-align:center;">Application sent! We will be in touch.</p>';
+    } catch(err) {
+      if (btn) btn.textContent = originalText;
+      alert('Failed to send. Please try again.');
+    }
+  });
+});
+</script>
     </body>
 </html>
