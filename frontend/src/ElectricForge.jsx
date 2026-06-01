@@ -181,7 +181,7 @@ const ApplyDrawer = ({ open, onClose }) => {
   );
 };
 
-const Field = ({ label, htmlFor, optional, children }) => (
+const Field = ({ label, htmlFor, optional, chi.ldren }) => (
   <div>
     <label htmlFor={htmlFor} className="flex items-baseline justify-between mb-2">
       <span className="eyebrow">{label}</span>
