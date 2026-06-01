@@ -43,5 +43,50 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+   
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  var form = document.querySelector('form');
+  if (!form) return;
+  
+  // NUKE the old broken Replit handler by cloning the form
+  var newForm = form.cloneNode(true);
+  form.parentNode.replaceChild(newForm, form);
+  
+  // Attach the new working handler
+  newForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    var btn = newForm.querySelector('button[type="submit"]');
+    var originalText = btn ? btn.textContent : 'Submit';
+    if (btn) btn.textContent = 'Sending...';
+    
+    // Collect all form data
+    var data = {};
+    newForm.querySelectorAll('input, textarea, select').forEach(function(el) {
+      var key = el.name || el.id;
+      if (key) data[key] = el.value;
+    });
+    
+    try {
+      var res = await fetch('https://little-morning-4803.hersh-bhardwaj.workers.dev/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      
+      if (res.ok) {
+        newForm.innerHTML = '<p style="color:green; text-align:center; font-size:18px; padding:20px;">Application sent! We will be in touch.</p>';
+      } else {
+        throw new Error('Server error');
+      }
+    } catch(err) {
+      if (btn) btn.textContent = originalText;
+      alert('Failed to send. Please try again.');
+    }
+  });
+});
+</script>
     </body>
 </html>
