@@ -6,7 +6,7 @@ import InvestmentPage from "./InvestmentPage";
 import MentorPage from "./MentorPage";
 
 // Inside your Routes / Switch:
-<<Route path="/mentor" element={<MentorPage />} />
+<Route path="/mentor" element={<MentorPage />} />
 function App() {
   return (
     <div className="App">
