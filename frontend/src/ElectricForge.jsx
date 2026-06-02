@@ -1007,7 +1007,11 @@ const SpecimenCard = () => {
     </section>
   );
 };
-
+<<Link to="/mentor" className="btn-ghost">
+  <span>Meet the Editor</span>
+  <ArrowRight size={14} strokeWidth={1.3} />
+</Link>
+  
 /* ──────────────────────────────────────────────────────────────────────────────
    FAQ Section
    ─────────────────────────────────────────────────────────────────────────── */
