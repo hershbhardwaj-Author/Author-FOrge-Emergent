@@ -4,6 +4,7 @@ import ElectricForge from "./ElectricForge";
 import AdminDashboard from "./AdminDashboard";
 import InvestmentPage from "./InvestmentPage";
 import MentorPage from "./MentorPage";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 // Inside your Routes / Switch:
 <Route path="/mentor" element={<MentorPage />} />
