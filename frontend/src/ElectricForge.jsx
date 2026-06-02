@@ -1050,7 +1050,41 @@ const FAQS = [
     a: "Residency pricing is shared during the application review. The Forge is a premium programme and priced accordingly. If you are accepted and the investment is not workable, we will tell you plainly rather than pressure you into a decision."
   },
 ];
+/* ──────────────────────────────────────────────────────────────────────────────
+   Mentor Poster — placed above FAQ
+   ─────────────────────────────────────────────────────────────────────────── */
 
+const MentorPosterSection = () => (
+  <section data-testid="section-mentor-poster" className="bg-[var(--ia-ivory-warm)] border-b hairline">
+    <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
+      <Link to="/mentor" className="group block relative overflow-hidden border hairline">
+        <div className="aspect-[21/9] bg-[var(--ia-ink)] flex items-center justify-center relative overflow-hidden">
+          <img
+            src="/mentor-poster.jpg"
+            alt="Meet Hersh Bhardwaj — Program Mentor & Editor"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.parentElement.innerHTML = '<span class="font-display-italic text-3xl sm:text-5xl text-[var(--ia-bronze)]">Meet the Editor</span>';
+            }}
+          />
+          <div className="absolute inset-0 bg-[var(--ia-ink)]/20 group-hover:bg-[var(--ia-ink)]/10 transition-colors duration-500" />
+          <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-12 flex items-end justify-between">
+            <div>
+              <Eyebrow className="text-[var(--ia-ivory-warm)] mb-2">Program Mentor & Editor</Eyebrow>
+              <h3 className="font-display text-2xl sm:text-4xl text-[var(--ia-ivory-warm)] leading-tight">
+                Meet the editor <em className="font-display-italic text-[var(--ia-bronze)]">behind the Forge</em>
+              </h3>
+            </div>
+            <span className="hidden sm:flex items-center gap-2 text-[var(--ia-ivory-warm)] text-sm tracking-[0.2em] uppercase border border-[var(--ia-ivory-warm)]/30 px-5 py-3 group-hover:bg-[var(--ia-ivory-warm)] group-hover:text-[var(--ia-ink)] transition-all duration-300">
+              Read the story <ArrowRight size={14} strokeWidth={1.3} />
+            </span>
+          </div>
+        </div>
+      </Link>
+    </div>
+  </section>
+);
 const FAQSection = () => {
   const [open, setOpen] = useState(null);
   return (
