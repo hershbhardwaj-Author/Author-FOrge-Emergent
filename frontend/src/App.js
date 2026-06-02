@@ -1,5 +1,5 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import ElectricForge from "./ElectricForge";
 import AdminDashboard from "./AdminDashboard";
 import InvestmentPage from "./InvestmentPage";
