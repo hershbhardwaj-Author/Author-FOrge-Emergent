@@ -3,7 +3,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ElectricForge from "./ElectricForge";
 import AdminDashboard from "./AdminDashboard";
 import InvestmentPage from "./InvestmentPage";
+import MentorPage from "./MentorPage";
 
+// Inside your Routes / Switch:
+<<Route path="/mentor" element={<MentorPage />} />
 function App() {
   return (
     <div className="App">
