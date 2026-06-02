@@ -26,8 +26,12 @@ const PortraitSection = ({ onApply }) => (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div className="relative order-2 lg:order-1">
           <div className="aspect-[4/5] bg-[var(--ia-ink)] flex items-center justify-center border hairline overflow-hidden">
-            <span className="font-display-italic text-4xl text-[var(--ia-bronze)]">Portrait</span>
-          </div>
+  <img
+    src="/mentor-portrait.jpg"
+    alt="Harshit Bhardwaj"
+    className="w-full h-full object-cover"
+  />
+</div>
           <div className="absolute -bottom-4 -right-4 w-28 h-28 bg-[var(--ia-forest)] flex items-center justify-center text-[var(--ia-ivory-warm)] font-display text-xs tracking-[0.3em] uppercase border hairline">
             Mentor<br />& Editor
           </div>
