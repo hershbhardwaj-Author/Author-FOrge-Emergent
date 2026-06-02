@@ -73,9 +73,10 @@ const ApplyDrawer = ({ open, onClose }) => {
     };
     setSubmitting(true);
     setErr(null);
-        try {
+    try {
       const res = await axios.post('https://little-morning-4803.hersh-bhardwaj.workers.dev', payload);
-setDone("Application received.");
+      setDone("Application received.");
+      form.reset();
     } catch (e2) {
       const detail = e2?.response?.data?.detail;
       setErr(
@@ -180,7 +181,7 @@ setDone("Application received.");
   );
 };
 
-const Field = ({ label, htmlFor, optional, chi.ldren }) => (
+const Field = ({ label, htmlFor, optional, children }) => (
   <div>
     <label htmlFor={htmlFor} className="flex items-baseline justify-between mb-2">
       <span className="eyebrow">{label}</span>
@@ -845,22 +846,27 @@ const useMagnetForm = (source) => {
   const [err, setErr] = useState(null);
   const [busy, setBusy] = useState(false);
 
-   const submit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const payload = {
-      name: form["af-name"].value.trim(),
-      email: form["af-email"].value.trim(),
-      expertise: form["af-expertise"].value,
-      concept: form["af-concept"].value.trim(),
-      stage: form["af-stage"].value || "",
-    };
-    setSubmitting(true);
+    const trimmed = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setErr("Please enter a valid email address.");
+      return;
+    }
+    setBusy(true);
     setErr(null);
     try {
-      const res = await axios.post('https://little-morning-4803.hersh-bhardwaj.workers.dev', payload);
-      setDone("Application received.");
-      form.reset();
+      const res = await axios.post(`${API}/leads`, { source, email: trimmed });
+      const msg = res.data?.message || "Thank you.";
+      const dl = res.data?.download_url;
+      setDone(msg);
+      setEmail("");
+      if (dl) {
+        // Auto-open the PDF in a new tab
+        const fullUrl = `${process.env.REACT_APP_BACKEND_URL}${dl}`;
+        window.open(fullUrl, "_blank", "noopener,noreferrer");
+      }
+      setTimeout(() => setDone(null), 8000);
     } catch (e2) {
       const detail = e2?.response?.data?.detail;
       setErr(
@@ -868,7 +874,7 @@ const useMagnetForm = (source) => {
         (typeof detail === "string" ? detail : "Submission failed. Please try again.")
       );
     } finally {
-      setSubmitting(false);
+      setBusy(false);
     }
   };
   return { email, setEmail, done, err, busy, submit };
