@@ -1007,10 +1007,7 @@ const SpecimenCard = () => {
     </section>
   );
 };
-<Link to="/mentor" className="btn-ghost">
-  <span>Meet the Editor</span>
-  <ArrowRight size={14} strokeWidth={1.3} />
-</Link>
+
   
 /* ──────────────────────────────────────────────────────────────────────────────
    FAQ Section
@@ -1162,6 +1159,7 @@ export default function ElectricForge() {
       <div className="reveal-in"><SpecimenCard /></div>
       <div className="reveal-in"><ProgramSection /></div>
       <div className="reveal-in"><DiagnosticSection onApply={onApply} /></div>
+      <div className="reveal-in"><MentorPosterSection /></div> 
       <div className="reveal-in"><FAQSection /></div>
       <div className="reveal-in"><FinalCTA onApply={onApply} /></div>
     </div>
