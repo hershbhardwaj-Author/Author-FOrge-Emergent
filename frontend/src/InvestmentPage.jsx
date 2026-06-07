@@ -480,14 +480,7 @@ const PAYMENT_PLANS = [
     best: "Authors ready to commit fully",
     featured: true,
   },
-  {
-    label: "Five Monthly Payments",
-    price: "$600 × 5",
-    inr: "₹50,000 × 5",
-    schedule: "Aligned with the 5-month residency timeline",
-    best: "Monthly budgeting without strain",
-    featured: false,
-  },
+  
 ];
 
 const PaymentSection = ({ onApply }) => (
