@@ -10,6 +10,23 @@ import {
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 /* ──────────────────────────────────────────────────────────────────────────────
+   Published Works Registry — populate as books ship
+   ─────────────────────────────────────────────────────────────────────────── */
+
+const BOOKS = [
+  // Template — uncomment and fill when each book is published:
+  // {
+  //   title: "The Authority Equation",
+  //   author: "Dr. Arjun Mehta",
+  //   isbn: "978-93-XXXX-XXX-X",
+  //   quote: "The editorial interrogation in Month Three changed everything I thought I knew about my own expertise.",
+  //   cohort: 1,
+  //   cover: "/books/authority-equation.jpg",
+  //   link: "https://amazon.com/dp/XXXXXXXX",
+  // },
+];
+
+/* ──────────────────────────────────────────────────────────────────────────────
    Editorial Ornament Components
    ─────────────────────────────────────────────────────────────────────────── */
 
@@ -217,12 +234,6 @@ const Marquee = () => {
 };
 
 /* ──────────────────────────────────────────────────────────────────────────────
-   Header / Masthead (added as editorial nameplate above countdown — preserves flow)
-   Actually: original has no header — first section is countdown. Keep that order.
-   We'll just add a subtle masthead row inside the countdown header area.
-   ─────────────────────────────────────────────────────────────────────────── */
-
-/* ──────────────────────────────────────────────────────────────────────────────
    Countdown Section
    ─────────────────────────────────────────────────────────────────────────── */
 
@@ -266,8 +277,14 @@ const CountdownSection = ({ onApply }) => {
             <Eyebrow>The Author's Forge · Electric Cohort</Eyebrow>
             <h1 className="mt-4 font-display text-[44px] sm:text-[62px] leading-[0.95]">
               From idea to <em className="font-display-italic text-[var(--ia-forest)]">published author</em><br />
-              in five months. * You write every word. We architect the process that forges it into a book.
+              in five months.
             </h1>
+            <div className="mt-6 max-w-xl">
+              <div className="h-px w-16 bg-[var(--ia-rule)] mb-4" />
+              <p className="text-lg sm:text-xl text-[var(--ia-ink-mute)] italic leading-relaxed">
+                You write every word. We architect the process that forges it into a book.
+              </p>
+            </div>
           </div>
           <button onClick={onApply} data-testid="masthead-apply" className="btn-ghost shrink-0">
             <span>Apply for the Forge</span>
@@ -401,6 +418,83 @@ const JourneySection = () => (
 );
 
 /* ──────────────────────────────────────────────────────────────────────────────
+   The Author's Covenant — Ghostwriter vs. Forge distinction
+   ─────────────────────────────────────────────────────────────────────────── */
+
+const AuthorCovenantSection = () => (
+  <section data-testid="section-covenant" className="bg-[var(--ia-ivory-warm)] border-b hairline">
+    <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-20 sm:py-28">
+      <div className="text-center max-w-2xl mx-auto mb-16">
+        <FolioNumber n={3} />
+        <h2 className="mt-6 font-display text-[44px] sm:text-[72px] leading-[0.95]">
+          The Author's <em className="font-display-italic">Covenant.</em>
+        </h2>
+        <div className="mt-10 w-24"><RuleOrnament glyph="✦" /></div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[440px]">
+        <div className="lg:border-r hairline p-10 lg:p-16 flex flex-col">
+          <div className="flex items-center gap-3 mb-8">
+            <span className="w-7 h-7 border hairline rounded-full flex items-center justify-center text-[var(--ia-ink-mute)]">
+              <X size={12} strokeWidth={1.3} />
+            </span>
+            <Eyebrow>The Ghostwriter's Path</Eyebrow>
+          </div>
+          <h3 className="font-display text-[28px] sm:text-[40px] leading-tight border-l hairline pl-6 text-[var(--ia-ink-soft)]">
+            You rent authority you cannot defend.
+          </h3>
+          <ul className="mt-10 space-y-5">
+            {[
+              "Someone else captures your voice",
+              "You own the byline, not the expertise",
+              "The manuscript is foreign to you on stage",
+              "You hope no one asks about Chapter Seven",
+            ].map((b, i) => (
+              <li key={i} className="flex items-baseline gap-4 text-[var(--ia-ink-mute)]">
+                <span className="font-display tabular text-xs tracking-[0.3em] mt-1 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                <span className="leading-relaxed">{b}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="p-10 lg:p-16 flex flex-col bg-[var(--ia-ivory-deep)]">
+          <div className="flex items-center gap-3 mb-8">
+            <span className="w-7 h-7 border border-[var(--ia-forest)] rounded-full flex items-center justify-center text-[var(--ia-forest)]">
+              <Check size={12} strokeWidth={1.5} />
+            </span>
+            <Eyebrow className="text-[var(--ia-forest)]">The Forge</Eyebrow>
+          </div>
+          <h3 className="font-display text-[28px] sm:text-[40px] leading-tight border-l border-[var(--ia-forest)] pl-6 text-[var(--ia-ink)]">
+            You forge authority you own absolutely.
+          </h3>
+          <ul className="mt-10 space-y-5">
+            {[
+              "Every word originates from your expertise",
+              "Our editors interrogate, they do not imitate",
+              "You can defend every argument on a podcast",
+              "The manuscript is yours because the labor is yours",
+            ].map((b, i) => (
+              <li key={i} className="flex items-baseline gap-4 text-[var(--ia-ink-soft)]">
+                <span className="font-display tabular text-xs tracking-[0.3em] mt-1 shrink-0 text-[var(--ia-forest)]">{String(i + 1).padStart(2, "0")}</span>
+                <span className="leading-relaxed">{b}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t hairline pt-6 flex items-center justify-between">
+        <div className="flex items-center gap-3 text-[var(--ia-ink-mute)]">
+          <span className="text-[10px] tracking-[0.4em] uppercase">Chapter 01</span>
+          <span className="leader-dots" />
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+/* ──────────────────────────────────────────────────────────────────────────────
    Decision (Tabs + Reveal)
    ─────────────────────────────────────────────────────────────────────────── */
 
@@ -499,7 +593,7 @@ const DecisionSection = () => {
     <section data-testid="section-comparison" className="bg-[var(--ia-ivory-warm)] border-b hairline">
       <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-20 sm:py-28">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <FolioNumber n={3} />
+          <FolioNumber n={4} />
           <h2 className="mt-6 font-display text-[44px] sm:text-[72px] leading-[0.95]">
             The decision is <em className="font-display-italic">simple.</em>
           </h2>
@@ -630,7 +724,7 @@ const PortfolioSection = () => {
       <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 items-end pb-12 border-b border-white/10">
           <div>
-            <span className="font-display tabular text-[11px] tracking-[0.4em] text-[var(--ia-bronze)] uppercase">№ 04</span>
+            <FolioNumber n={5} />
             <h2 className="mt-6 font-display text-[56px] sm:text-[88px] leading-[0.92]">
               Here's what<br /><em className="font-display-italic text-[var(--ia-bronze)]">gets built.</em>
             </h2>
@@ -687,6 +781,72 @@ const PortfolioSection = () => {
 };
 
 /* ──────────────────────────────────────────────────────────────────────────────
+   The Imprint — Publisher transparency
+   ─────────────────────────────────────────────────────────────────────────── */
+
+const ImprintSection = () => (
+  <section data-testid="section-imprint" className="bg-[var(--ia-ivory-warm)] border-b hairline">
+    <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
+      <div className="max-w-[65ch] mx-auto">
+        <FolioNumber n={6} />
+        <h2 className="mt-6 font-display text-[48px] sm:text-[72px] leading-[0.95]">
+          The <em className="font-display-italic text-[var(--ia-forest)]">Imprint.</em>
+        </h2>
+        <div className="mt-10 w-24"><RuleOrnament glyph="✦" /></div>
+
+        <div className="mt-16 space-y-16">
+          <div>
+            <h3 className="font-display text-2xl leading-tight mb-4">Publication under James Hemingway of Shreem Books.</h3>
+            <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)]">
+              Your book is published under our dedicated nonfiction imprint. Not a vanity press. Not a third-party logo we rent. An imprint built solely for Forge authors.
+            </p>
+            <div className="mt-4 flex items-center gap-3 text-[var(--ia-ink-mute)]">
+              <span className="text-[10px] tracking-[0.4em] uppercase">Chapter 01</span>
+              <span className="leader-dots" />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-display text-2xl leading-tight mb-4">Ownership</h3>
+            <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)]">
+              You retain 100% of rights and royalties. The ISBN is registered in your name. You own the asset.
+            </p>
+            <div className="mt-4 flex items-center gap-3 text-[var(--ia-ink-mute)]">
+              <span className="text-[10px] tracking-[0.4em] uppercase">Chapter 02</span>
+              <span className="leader-dots" />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-display text-2xl leading-tight mb-4">Distribution</h3>
+            <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)]">
+              Hardcover, paperback, and ebook distributed via IngramSpark and Amazon KDP. Available to any bookstore with an ordering system.
+            </p>
+            <div className="mt-4 flex items-center gap-3 text-[var(--ia-ink-mute)]">
+              <span className="text-[10px] tracking-[0.4em] uppercase">Chapter 03</span>
+              <span className="leader-dots" />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-display text-2xl leading-tight mb-4">The Legal Framework</h3>
+            <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)]">
+              We handle the mechanicals. You hold the copyright. The contract is simple enough to read in one sitting.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-16 pt-8 border-t hairline flex items-center gap-4 text-[var(--ia-ink-mute)]">
+          <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Folio</span>
+          <span className="leader-dots" />
+          <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Imprint · 3 pp</span>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+/* ──────────────────────────────────────────────────────────────────────────────
    Program at a Glance
    ─────────────────────────────────────────────────────────────────────────── */
 
@@ -703,7 +863,7 @@ const ProgramSection = () => (
     <div className="max-w-[1480px] mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-12 items-end pb-12 border-b hairline">
         <div>
-          <FolioNumber n={5} />
+          <FolioNumber n={7} />
           <h2 className="mt-6 font-display text-[48px] sm:text-[80px] leading-[0.95]">
             Program <em className="font-display-italic text-[var(--ia-forest)]">at a glance</em>
           </h2>
@@ -780,13 +940,215 @@ const DiagnosticSection = ({ onApply }) => (
 );
 
 /* ──────────────────────────────────────────────────────────────────────────────
+   The Library — Published Works & Social Proof
+   ─────────────────────────────────────────────────────────────────────────── */
+
+const LibrarySection = () => {
+  const hasBooks = BOOKS.length > 0;
+  return (
+    <section data-testid="section-library" className="bg-[var(--ia-ivory-deep)] border-b hairline">
+      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <FolioNumber n={8} />
+          <h2 className="mt-6 font-display text-[56px] sm:text-[88px] leading-[0.92]">
+            The <em className="font-display-italic text-[var(--ia-forest)]">Library.</em>
+          </h2>
+          <p className="mt-6 text-lg text-[var(--ia-ink-mute)] italic">
+            Every book that leaves The Forge is a verifiable artifact. Not a mockup. A registered, distributed, physical book.
+          </p>
+          <div className="mt-10 w-24"><RuleOrnament glyph="✦" /></div>
+        </div>
+
+        {hasBooks ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--ia-rule)] border hairline">
+            {BOOKS.map((book, i) => (
+              <article key={i} className="bg-[var(--ia-ivory-warm)] p-8 sm:p-10 flex flex-col">
+                <div className="aspect-[2/3] bg-[var(--ia-ink)] mb-6 relative overflow-hidden">
+                  {book.cover ? (
+                    <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-[var(--ia-ivory-warm)] font-display text-2xl">
+                      {book.title}
+                    </div>
+                  )}
+                </div>
+                <div className="font-display text-2xl leading-tight">{book.title}</div>
+                <div className="mt-2 eyebrow text-[var(--ia-ink-mute)]">by {book.author}</div>
+                <div className="mt-4 text-xs text-[var(--ia-ink-mute)] tabular">ISBN: {book.isbn}</div>
+                <blockquote className="mt-6 text-sm italic text-[var(--ia-ink-soft)] border-l-2 border-[var(--ia-bronze)] pl-4">
+                  "{book.quote}"
+                </blockquote>
+                <div className="mt-4 text-xs text-[var(--ia-ink-mute)]">— {book.author}, Cohort {book.cohort}</div>
+                {book.link && (
+                  <a href={book.link} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 text-[var(--ia-forest)] text-sm hover:underline">
+                    Verify on Amazon <ArrowUpRight size={12} strokeWidth={1.3} />
+                  </a>
+                )}
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="border hairline p-12 sm:p-16 bg-[var(--ia-ivory-warm)]">
+              <div className="font-display text-3xl sm:text-4xl leading-tight mb-6">
+                The Founding <em className="font-display-italic text-[var(--ia-forest)]">Cohort</em>
+              </div>
+              <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)] mb-8">
+                Cohort 1 is currently in production. These authors are writing now. We are accepting applications for Cohort 2. Early residents receive lifetime access to the Author's Portal.
+              </p>
+              <div className="flex items-center justify-center gap-4 text-[var(--ia-ink-mute)]">
+                <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Folio</span>
+                <span className="leader-dots" />
+                <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Library · 0 pp</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   Mentor Poster — placed above FAQ
+   ─────────────────────────────────────────────────────────────────────────── */
+
+const MentorPosterSection = () => (
+  <section data-testid="section-mentor-poster" className="bg-[var(--ia-ivory-warm)] border-b hairline">
+    <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
+      <Link to="/mentor" className="group block relative overflow-hidden border hairline">
+        <div className="aspect-[21/9] bg-[var(--ia-ink)] flex items-center justify-center relative overflow-hidden">
+          <img
+            src="/mentor-poster.jpg"
+            alt="Meet Hersh Bhardwaj — Program Mentor & Editor"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.parentElement.innerHTML = '<span class="font-display-italic text-3xl sm:text-5xl text-[var(--ia-bronze)]">Meet the Editor</span>';
+            }}
+          />
+          <div className="absolute inset-0 bg-[var(--ia-ink)]/20 group-hover:bg-[var(--ia-ink)]/10 transition-colors duration-500" />
+          <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-12 flex items-end justify-between">
+            <div>
+              <Eyebrow className="text-[var(--ia-ivory-warm)] mb-2">Program Mentor & Editor</Eyebrow>
+              <h3 className="font-display text-2xl sm:text-4xl text-[var(--ia-ivory-warm)] leading-tight">
+                Meet the editor <em className="font-display-italic text-[var(--ia-bronze)]">behind the Forge</em>
+              </h3>
+            </div>
+            <span className="hidden sm:flex items-center gap-2 text-[var(--ia-ivory-warm)] text-sm tracking-[0.2em] uppercase border border-[var(--ia-ivory-warm)]/30 px-5 py-3 group-hover:bg-[var(--ia-ivory-warm)] group-hover:text-[var(--ia-ink)] transition-all duration-300">
+              Read the story <ArrowRight size={14} strokeWidth={1.3} />
+            </span>
+          </div>
+        </div>
+      </Link>
+    </div>
+  </section>
+);
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   FAQ Section
+   ─────────────────────────────────────────────────────────────────────────── */
+
+const FAQS = [
+  {
+    q: "Will someone else write my book?",
+    a: "No. You write every chapter. We provide the architecture, the deadlines, the weekly masterclasses, and the editorial interrogation. The manuscript is yours because the intellectual labor is yours. This is executive education for authorship, not a done-for-you service."
+  },
+  {
+    q: "Who is the publisher?",
+    a: "Your book is published under James Hemingway of Shreem Books, our dedicated nonfiction imprint. We do not pitch your book to traditional houses. Instead, we build your author platform so you own the asset, the audience, and the revenue. You retain 100% of rights and royalties."
+  },
+  {
+    q: "Can I verify past authors?",
+    a: "Yes. Every Forge book carries a registered ISBN and is listed in commercial distribution. The Library (№ 08) shows every published work with author acknowledgment excerpts. You are welcome to verify any title independently."
+  },
+  {
+    q: "Who actually writes the manuscript?",
+    a: "You do — every word. Our editorial team structures your thinking, challenges your arguments, and refines your prose through five months of intensive feedback. The voice, the ideas, and the authority on the page are entirely yours."
+  },
+  {
+    q: "What kind of expert is The Forge designed for?",
+    a: "The Forge is built for high-achieving professionals — consultants, executives, coaches, and domain specialists — who have a body of knowledge worth publishing and a business that a book would directly advance. We are not a general creative writing programme."
+  },
+  {
+    q: "Do I need writing experience?",
+    a: "No. Many of our authors have never written long-form before. What you need is deep expertise and the discipline to show up. Our editorial process is designed to extract and shape ideas from people who think clearly, not people who already write fluently."
+  },
+  {
+    q: "What is the weekly time commitment?",
+    a: "Plan for eight to twelve hours per week across writing, masterclasses, and editorial sessions. The residency is intensive by design — a published book in five months requires real investment. Authors who treat it as a side project do not finish on schedule."
+  },
+  {
+    q: "What does 'guaranteed publishing' mean?",
+    a: "Every author who completes the residency walks away with a finished, professionally typeset book — distributed in print and digital formats across major retail channels. There is no additional publishing fee beyond your residency investment."
+  },
+  {
+    q: "How are cohort spots allocated?",
+    a: "Each cohort is capped at ten to twelve authors. Spots are awarded by our editorial board based on the strength of your application — specifically your expertise, your book concept, and your readiness to commit. We do not operate a waitlist; when the cohort fills, applications close."
+  },
+  {
+    q: "What happens after the five months?",
+    a: "You receive a published book, a marketing blueprint, and ongoing access to The Author's Portal. The editorial relationship does not end at month five — we support your launch window and remain available for strategic counsel as your book begins to work in your market."
+  },
+  {
+    q: "What is the investment?",
+    a: "Residency pricing is shared during the application review. The Forge is a premium programme and priced accordingly. If you are accepted and the investment is not workable, we will tell you plainly rather than pressure you into a decision."
+  },
+];
+
+const FAQSection = () => {
+  const [open, setOpen] = useState(null);
+  return (
+    <section data-testid="section-faq" className="bg-[var(--ia-ivory-deep)] border-b hairline">
+      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-16">
+          <div>
+            <FolioNumber n={9} />
+            <h2 className="mt-6 font-display text-[44px] sm:text-[64px] leading-[0.95]">
+              Frequently<br /><em className="font-display-italic text-[var(--ia-forest)]">asked.</em>
+            </h2>
+            <div className="mt-10 w-16"><RuleOrnament glyph="✦" /></div>
+          </div>
+          <div className="divide-y hairline">
+            {FAQS.map((item, i) => {
+              const isOpen = open === i;
+              return (
+                <div key={i} className="group">
+                  <button
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    className="w-full flex items-start justify-between gap-8 py-7 text-left"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-display text-[20px] sm:text-[24px] leading-tight text-[var(--ia-ink)] group-hover:text-[var(--ia-forest)] transition-colors duration-300">
+                      {item.q}
+                    </span>
+                    <span className={`shrink-0 mt-1 w-6 h-6 border hairline rounded-full flex items-center justify-center text-[var(--ia-ink-mute)] transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`}>
+                      <ArrowUpRight size={12} strokeWidth={1.3} />
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="block-fade pb-8 pr-14">
+                      <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)]">{item.a}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ──────────────────────────────────────────────────────────────────────────────
    Final CTA
    ─────────────────────────────────────────────────────────────────────────── */
 
 const FinalCTA = ({ onApply }) => (
   <section data-testid="section-cta" className="bg-[var(--ia-ivory)] py-32 sm:py-40 px-6 sm:px-12">
     <div className="max-w-[1200px] mx-auto flex flex-col items-center text-center">
-      <FolioNumber n={7} />
+      <FolioNumber n={10} />
       <h2 data-testid="text-cta-headline" className="mt-8 font-display text-[44px] sm:text-[88px] leading-[0.95]">
         You don't just write a book.<br />
         <em className="font-display-italic text-[var(--ia-forest)]">You become the kind of author</em><br />
@@ -829,6 +1191,11 @@ const FinalCTA = ({ onApply }) => (
       <div className="sm:text-right">
         <Eyebrow>Established</Eyebrow>
         <div className="mt-3 font-display tabular text-2xl text-[var(--ia-ink)]">MMXXIV</div>
+        <div className="mt-2 text-sm italic text-[var(--ia-ink-mute)]">
+          {BOOKS.length > 0
+            ? `${BOOKS.length} Books Forged · ${BOOKS.length} Authors Published`
+            : "Cohort 1 in Production · Applications Open for Cohort 2"}
+        </div>
       </div>
     </div>
   </section>
@@ -1008,125 +1375,6 @@ const SpecimenCard = () => {
   );
 };
 
-  
-/* ──────────────────────────────────────────────────────────────────────────────
-   FAQ Section
-   ─────────────────────────────────────────────────────────────────────────── */
-
-const FAQS = [
-  {
-    q: "Who actually writes the manuscript?",
-    a: "You do — every word. Our editorial team structures your thinking, challenges your arguments, and refines your prose through five months of intensive feedback. The voice, the ideas, and the authority on the page are entirely yours."
-  },
-  {
-    q: "What kind of expert is The Forge designed for?",
-    a: "The Forge is built for high-achieving professionals — consultants, executives, coaches, and domain specialists — who have a body of knowledge worth publishing and a business that a book would directly advance. We are not a general creative writing programme."
-  },
-  {
-    q: "Do I need writing experience?",
-    a: "No. Many of our authors have never written long-form before. What you need is deep expertise and the discipline to show up. Our editorial process is designed to extract and shape ideas from people who think clearly, not people who already write fluently."
-  },
-  {
-    q: "What is the weekly time commitment?",
-    a: "Plan for eight to twelve hours per week across writing, masterclasses, and editorial sessions. The residency is intensive by design — a published book in five months requires real investment. Authors who treat it as a side project do not finish on schedule."
-  },
-  {
-    q: "What does 'guaranteed publishing' mean?",
-    a: "Every author who completes the residency walks away with a finished, professionally typeset book — distributed in print and digital formats across major retail channels. There is no additional publishing fee beyond your residency investment."
-  },
-  {
-    q: "How are cohort spots allocated?",
-    a: "Each cohort is capped at ten to twelve authors. Spots are awarded by our editorial board based on the strength of your application — specifically your expertise, your book concept, and your readiness to commit. We do not operate a waitlist; when the cohort fills, applications close."
-  },
-  {
-    q: "What happens after the five months?",
-    a: "You receive a published book, a marketing blueprint, and ongoing access to The Author's Portal. The editorial relationship does not end at month five — we support your launch window and remain available for strategic counsel as your book begins to work in your market."
-  },
-  {
-    q: "What is the investment?",
-    a: "Residency pricing is shared during the application review. The Forge is a premium programme and priced accordingly. If you are accepted and the investment is not workable, we will tell you plainly rather than pressure you into a decision."
-  },
-];
-/* ──────────────────────────────────────────────────────────────────────────────
-   Mentor Poster — placed above FAQ
-   ─────────────────────────────────────────────────────────────────────────── */
-
-const MentorPosterSection = () => (
-  <section data-testid="section-mentor-poster" className="bg-[var(--ia-ivory-warm)] border-b hairline">
-    <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
-      <Link to="/mentor" className="group block relative overflow-hidden border hairline">
-        <div className="aspect-[21/9] bg-[var(--ia-ink)] flex items-center justify-center relative overflow-hidden">
-          <img
-            src="/mentor-poster.jpg"
-            alt="Meet Hersh Bhardwaj — Program Mentor & Editor"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-            onError={(e) => {
-              e.target.style.display = 'none';
-              e.target.parentElement.innerHTML = '<span class="font-display-italic text-3xl sm:text-5xl text-[var(--ia-bronze)]">Meet the Editor</span>';
-            }}
-          />
-          <div className="absolute inset-0 bg-[var(--ia-ink)]/20 group-hover:bg-[var(--ia-ink)]/10 transition-colors duration-500" />
-          <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-12 flex items-end justify-between">
-            <div>
-              <Eyebrow className="text-[var(--ia-ivory-warm)] mb-2">Program Mentor & Editor</Eyebrow>
-              <h3 className="font-display text-2xl sm:text-4xl text-[var(--ia-ivory-warm)] leading-tight">
-                Meet the editor <em className="font-display-italic text-[var(--ia-bronze)]">behind the Forge</em>
-              </h3>
-            </div>
-            <span className="hidden sm:flex items-center gap-2 text-[var(--ia-ivory-warm)] text-sm tracking-[0.2em] uppercase border border-[var(--ia-ivory-warm)]/30 px-5 py-3 group-hover:bg-[var(--ia-ivory-warm)] group-hover:text-[var(--ia-ink)] transition-all duration-300">
-              Read the story <ArrowRight size={14} strokeWidth={1.3} />
-            </span>
-          </div>
-        </div>
-      </Link>
-    </div>
-  </section>
-);
-const FAQSection = () => {
-  const [open, setOpen] = useState(null);
-  return (
-    <section data-testid="section-faq" className="bg-[var(--ia-ivory-deep)] border-b hairline">
-      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-16">
-          <div>
-            <FolioNumber n={6} />
-            <h2 className="mt-6 font-display text-[44px] sm:text-[64px] leading-[0.95]">
-              Frequently<br /><em className="font-display-italic text-[var(--ia-forest)]">asked.</em>
-            </h2>
-            <div className="mt-10 w-16"><RuleOrnament glyph="✦" /></div>
-          </div>
-          <div className="divide-y hairline">
-            {FAQS.map((item, i) => {
-              const isOpen = open === i;
-              return (
-                <div key={i} className="group">
-                  <button
-                    onClick={() => setOpen(isOpen ? null : i)}
-                    className="w-full flex items-start justify-between gap-8 py-7 text-left"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="font-display text-[20px] sm:text-[24px] leading-tight text-[var(--ia-ink)] group-hover:text-[var(--ia-forest)] transition-colors duration-300">
-                      {item.q}
-                    </span>
-                    <span className={`shrink-0 mt-1 w-6 h-6 border hairline rounded-full flex items-center justify-center text-[var(--ia-ink-mute)] transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`}>
-                      <ArrowUpRight size={12} strokeWidth={1.3} />
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="block-fade pb-8 pr-14">
-                      <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)]">{item.a}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 /* ──────────────────────────────────────────────────────────────────────────────
    Root
    ─────────────────────────────────────────────────────────────────────────── */
@@ -1153,13 +1401,16 @@ export default function ElectricForge() {
       <Marquee />
       <div className="reveal-in"><CountdownSection onApply={onApply} /></div>
       <div className="reveal-in"><JourneySection /></div>
+      <div className="reveal-in"><AuthorCovenantSection /></div>
       <div className="reveal-in"><CurriculumBriefStrip /></div>
       <div className="reveal-in"><DecisionSection /></div>
       <div className="reveal-in"><PortfolioSection /></div>
       <div className="reveal-in"><SpecimenCard /></div>
+      <div className="reveal-in"><ImprintSection /></div>
       <div className="reveal-in"><ProgramSection /></div>
       <div className="reveal-in"><DiagnosticSection onApply={onApply} /></div>
-      <div className="reveal-in"><MentorPosterSection /></div> 
+      <div className="reveal-in"><LibrarySection /></div>
+      <div className="reveal-in"><MentorPosterSection /></div>
       <div className="reveal-in"><FAQSection /></div>
       <div className="reveal-in"><FinalCTA onApply={onApply} /></div>
     </div>
