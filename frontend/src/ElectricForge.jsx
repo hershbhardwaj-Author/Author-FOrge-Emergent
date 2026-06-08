@@ -266,7 +266,7 @@ const CountdownSection = ({ onApply }) => {
             <Eyebrow>The Author's Forge · Electric Cohort</Eyebrow>
             <h1 className="mt-4 font-display text-[44px] sm:text-[62px] leading-[0.95]">
               From idea to <em className="font-display-italic text-[var(--ia-forest)]">published author</em><br />
-              in five months.
+              in five months. * You write every word. We architect the process that forges it into a book.
             </h1>
           </div>
           <button onClick={onApply} data-testid="masthead-apply" className="btn-ghost shrink-0">
@@ -337,8 +337,8 @@ const CountdownSection = ({ onApply }) => {
 
 const PHASES = [
   { n: "01", title: "The Architecture", tag: "Month 1", body: "Blueprint the foundation. We tear down your ideas and rebuild them into an unshakable structure.", accent: "bronze" },
-  { n: "02", title: "The Writing Forge", tag: "Months 2 & 3", body: "This is where the fire gets hot. Intensive, relentless writing with direct editorial feedback.", accent: "forest", icon: Flame },
-  { n: "03", title: "Publishing Mechanics", tag: "Month 4", body: "We handle the technical execution. Typesetting, cover design, legal framework.", accent: "ink" },
+  { n: "02", title: "The Writing Forge", tag: "Months 2 & 3", body: "This is where the fire gets hot. Intensive, relentless writing with rigorous editorial interrogation. You author every chapter. We challenge every assumption.", accent: "forest", icon: Flame },
+  { n: "03", title: "Publishing Mechanics", tag: "Month 4", body: "We handle the technical execution. Typesetting, cover design, and publication under James Hemingway of Shreem Books. You retain full rights and royalties.", accent: "ink" },
   { n: "04", title: "The Publicity Engine", tag: "Month 5", body: "Launch preparation. We don't just release a book, we detonate it in your market.", accent: "forest-dark" },
   { n: "05", title: "Beyond the Book", tag: "Ongoing", body: "Your book is a weapon. We teach you how to wield it to dominate your industry long-term.", accent: "bronze-soft" },
 ];
