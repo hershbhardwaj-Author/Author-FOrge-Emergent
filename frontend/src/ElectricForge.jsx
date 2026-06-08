@@ -14,16 +14,28 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
    ─────────────────────────────────────────────────────────────────────────── */
 
 const BOOKS = [
-  // Template — uncomment and fill when each book is published:
-  // {
-  //   title: "The Authority Equation",
-  //   author: "Dr. Arjun Mehta",
-  //   isbn: "978-93-XXXX-XXX-X",
-  //   quote: "The editorial interrogation in Month Three changed everything I thought I knew about my own expertise.",
-  //   cohort: 1,
-  //   cover: "/books/authority-equation.jpg",
-  //   link: "https://amazon.com/dp/XXXXXXXX",
-  // },
+  {
+    title: "The Everest Inside",
+    author: "Anant Rao",
+    authorBio: "UBA Group, Advisor · Banker · Consultant · Fintech · Payments · Lending · Executive & Leadership Coach ICF (ACC) · Blockchain Technology Consultant · Ex Citi · Board Member",
+    authorPhoto: "/authors/anant-rao.jpg",
+    cohort: 1,
+    quote: "The editorial interrogation in Month Three changed everything I thought I knew about my own expertise.",
+    isbn: null,
+    cover: null,
+    link: null,
+  },
+  {
+    title: "The IMpossible Goals",
+    author: "Priya V Singh",
+    authorBio: "Founder — Impossible Goals Movement. For founders and CXOs ready for non-linear, impossible outcomes. Ex-Google, AWS, IBM.",
+    authorPhoto: "/authors/priya-singh.jpg",
+    cohort: 1,
+    quote: "The Forge didn't just help me write a book. It taught me to think like an author.",
+    isbn: null,
+    cover: null,
+    link: null,
+  },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────────
@@ -962,28 +974,102 @@ const LibrarySection = () => {
         {hasBooks ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--ia-rule)] border hairline">
             {BOOKS.map((book, i) => (
-              <article key={i} className="bg-[var(--ia-ivory-warm)] p-8 sm:p-10 flex flex-col">
-                <div className="aspect-[2/3] bg-[var(--ia-ink)] mb-6 relative overflow-hidden">
+              <article key={i} className="bg-[var(--ia-ivory-warm)] flex flex-col">
+                {/* Visual Anchor: Cover if available, else Author Photo */}
+                <div className="aspect-[2/3] bg-[var(--ia-ink)] relative overflow-hidden">
                   {book.cover ? (
-                    <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
+                    <img 
+                      src={book.cover} 
+                      alt={book.title} 
+                      className="w-full h-full object-cover" 
+                    />
+                  ) : book.authorPhoto ? (
+                    <>
+                      <img 
+                        src={book.authorPhoto} 
+                        alt={book.author} 
+                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.querySelector('.fallback').style.display = 'flex';
+                        }}
+                      />
+                      <div 
+                        className="fallback hidden absolute inset-0 flex-col items-center justify-center p-8 text-center"
+                        style={{ display: 'none' }}
+                      >
+                        <div className="font-display text-4xl sm:text-5xl text-[var(--ia-ivory-warm)] leading-tight mb-4">
+                          {book.title}
+                        </div>
+                        <div className="w-12 h-px bg-[var(--ia-bronze)]" />
+                      </div>
+                    </>
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[var(--ia-ivory-warm)] font-display text-2xl">
-                      {book.title}
+                    <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">
+                      <div className="font-display text-4xl sm:text-5xl text-[var(--ia-ivory-warm)] leading-tight mb-4">
+                        {book.title}
+                      </div>
+                      <div className="w-12 h-px bg-[var(--ia-bronze)]" />
+                    </div>
+                  )}
+
+                  {/* Overlay badge for cohort */}
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-2 bg-[var(--ia-ivory-warm)]/90 backdrop-blur-sm px-3 py-1.5 text-[10px] tracking-[0.3em] uppercase text-[var(--ia-ink)] font-display">
+                      <Star size={10} strokeWidth={1.5} className="text-[var(--ia-bronze-deep)]" />
+                      Cohort {book.cohort}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-8 sm:p-10 flex flex-col flex-1">
+                  <div className="font-display text-2xl sm:text-3xl leading-tight">{book.title}</div>
+
+                  <div className="mt-3 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--ia-ink)] overflow-hidden">
+                      {book.authorPhoto && (
+                        <img 
+                          src={book.authorPhoto} 
+                          alt="" 
+                          className="w-full h-full object-cover grayscale"
+                        />
+                      )}
+                    </div>
+                    <div className="eyebrow text-[var(--ia-ink-mute)]">by {book.author}</div>
+                  </div>
+
+                  <p className="mt-4 text-sm leading-relaxed text-[var(--ia-ink-soft)]">
+                    {book.authorBio}
+                  </p>
+
+                  {book.isbn && (
+                    <div className="mt-4 text-xs text-[var(--ia-ink-mute)] tabular font-mono">
+                      ISBN: {book.isbn}
+                    </div>
+                  )}
+
+                  {book.quote && (
+                    <blockquote className="mt-6 text-sm italic text-[var(--ia-ink-soft)] border-l-2 border-[var(--ia-bronze)] pl-4">
+                      "{book.quote}"
+                    </blockquote>
+                  )}
+
+                  {book.link ? (
+                    <a 
+                      href={book.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="mt-auto pt-6 inline-flex items-center gap-2 text-[var(--ia-forest)] text-sm hover:underline"
+                    >
+                      Verify on Amazon <ArrowUpRight size={12} strokeWidth={1.3} />
+                    </a>
+                  ) : (
+                    <div className="mt-auto pt-6 text-xs text-[var(--ia-ink-mute)] italic">
+                      In production — publication forthcoming
                     </div>
                   )}
                 </div>
-                <div className="font-display text-2xl leading-tight">{book.title}</div>
-                <div className="mt-2 eyebrow text-[var(--ia-ink-mute)]">by {book.author}</div>
-                <div className="mt-4 text-xs text-[var(--ia-ink-mute)] tabular">ISBN: {book.isbn}</div>
-                <blockquote className="mt-6 text-sm italic text-[var(--ia-ink-soft)] border-l-2 border-[var(--ia-bronze)] pl-4">
-                  "{book.quote}"
-                </blockquote>
-                <div className="mt-4 text-xs text-[var(--ia-ink-mute)]">— {book.author}, Cohort {book.cohort}</div>
-                {book.link && (
-                  <a href={book.link} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 text-[var(--ia-forest)] text-sm hover:underline">
-                    Verify on Amazon <ArrowUpRight size={12} strokeWidth={1.3} />
-                  </a>
-                )}
               </article>
             ))}
           </div>
