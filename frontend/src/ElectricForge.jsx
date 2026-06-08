@@ -367,7 +367,7 @@ const CountdownSection = ({ onApply }) => {
 const PHASES = [
   { n: "01", title: "The Architecture", tag: "Month 1", body: "Blueprint the foundation. We tear down your ideas and rebuild them into an unshakable structure.", accent: "bronze" },
   { n: "02", title: "The Writing Forge", tag: "Months 2 & 3", body: "This is where the fire gets hot. Intensive, relentless writing with rigorous editorial interrogation. You author every chapter. We challenge every assumption.", accent: "forest", icon: Flame },
-  { n: "03", title: "Publishing Mechanics", tag: "Month 4", body: "We handle the technical execution. Typesetting, cover design, and publication under James Hemingway of Shreem Books. You retain full rights and royalties.", accent: "ink" },
+  { n: "03", title: "Publishing Mechanics", tag: "Month 4", body: "We handle the technical execution. Typesetting, cover design, and publication under James Hemingway of Shreem Books. You retain full rights and royalties. See the Shreem Books catalogue.", accent: "ink", link: "/shreem-books" },
   { n: "04", title: "The Publicity Engine", tag: "Month 5", body: "Launch preparation. We don't just release a book, we detonate it in your market.", accent: "forest-dark" },
   { n: "05", title: "Beyond the Book", tag: "Ongoing", body: "Your book is a weapon. We teach you how to wield it to dominate your industry long-term.", accent: "bronze-soft" },
 ];
@@ -416,6 +416,15 @@ const JourneySection = () => (
               <p className={`mt-6 text-lg leading-relaxed flex-1 ${dark ? "text-white/80" : "text-[var(--ia-ink-soft)]"}`}>
                 {p.body}
               </p>
+              {p.link && (
+                <Link 
+                  to={p.link}
+                  className={`mt-4 inline-flex items-center gap-2 text-sm ${dark ? "text-[var(--ia-bronze)] hover:text-white" : "text-[var(--ia-forest)] hover:text-[var(--ia-ink)]"} transition-colors duration-300`}
+                >
+                  <span className="text-[10px] tracking-[0.2em] uppercase">View Catalogue</span>
+                  <ArrowUpRight size={12} strokeWidth={1.3} />
+                </Link>
+              )}
               <div className={`mt-10 flex items-center gap-3 ${dark ? "text-[var(--ia-bronze)]" : "text-[var(--ia-ink-mute)]"}`}>
                 <span className="text-[10px] tracking-[0.4em] uppercase">Chapter {p.n}</span>
                 <span className="leader-dots" />
@@ -721,7 +730,7 @@ const DELIVERABLES = [
   { tag: "Deliverable 01", title: "Finished Manuscript", meta: "70,000–90,000 Words", icon: FileText,
     detail: "A complete, edited, structurally sound manuscript — line-edited, sequenced, and ready for typesetting." },
   { tag: "Deliverable 02", title: "Published Book", meta: "Print + Digital", icon: BookOpen,
-    detail: "Typeset, cover-designed, and published across hardcover, paperback, ebook and audiobook distribution." },
+    detail: "Typeset, cover-designed, and published under Shreem Books across hardcover, paperback, ebook and audiobook distribution. View the complete Shreem Books catalogue.", link: "/shreem-books" },
   { tag: "Deliverable 03", title: "Marketing Blueprint", meta: "Launch Strategy", icon: Megaphone,
     detail: "A full launch plan: positioning, PR pathways, social architecture, podcast tour and bulk-order logistics." },
   { tag: "Deliverable 04", title: "Lasting Authority", meta: "Market Position", icon: Globe,
@@ -781,9 +790,20 @@ const PortfolioSection = () => {
           ) : (
             <div className="block-fade flex flex-col sm:flex-row sm:items-center gap-6 w-full">
               <span className="eyebrow text-[var(--ia-bronze)] shrink-0">{DELIVERABLES[selected].tag}</span>
-              <p className="text-white/80 leading-relaxed text-lg max-w-3xl">
-                {DELIVERABLES[selected].detail}
-              </p>
+              <div className="flex-1">
+                <p className="text-white/80 leading-relaxed text-lg max-w-3xl">
+                  {DELIVERABLES[selected].detail}
+                </p>
+                {DELIVERABLES[selected].link && (
+                  <Link 
+                    to={DELIVERABLES[selected].link}
+                    className="mt-3 inline-flex items-center gap-2 text-[var(--ia-bronze)] text-sm hover:text-white transition-colors duration-300"
+                  >
+                    <span className="text-[10px] tracking-[0.2em] uppercase">View Catalogue</span>
+                    <ArrowUpRight size={12} strokeWidth={1.3} />
+                  </Link>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -846,12 +866,27 @@ const ImprintSection = () => (
               We handle the mechanicals. You hold the copyright. The contract is simple enough to read in one sitting.
             </p>
           </div>
+
+          {/* Chapter 04 — The Shreem Books Catalogue */}
+          <div className="pt-8 border-t hairline">
+            <h3 className="font-display text-2xl leading-tight mb-4">The Shreem Books Catalogue</h3>
+            <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)] mb-8">
+              Fourteen titles published under the imprint. Books that earned their place on a shelf.
+            </p>
+            <Link 
+              to="/shreem-books" 
+              className="inline-flex items-center gap-3 h-[52px] px-10 bg-[var(--ia-ink)] text-[var(--ia-ivory-warm)] text-[11px] tracking-[0.28em] uppercase hover:bg-[var(--ia-forest)] transition-colors duration-300"
+            >
+              <span>View the Catalogue</span>
+              <ArrowUpRight size={13} strokeWidth={1.3} />
+            </Link>
+          </div>
         </div>
 
         <div className="mt-16 pt-8 border-t hairline flex items-center gap-4 text-[var(--ia-ink-mute)]">
           <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Folio</span>
           <span className="leader-dots" />
-          <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Imprint · 3 pp</span>
+          <span className="font-display tabular text-[11px] tracking-[0.4em] uppercase">Imprint · 4 pp</span>
         </div>
       </div>
     </div>
@@ -1142,7 +1177,7 @@ const FAQS = [
   },
   {
     q: "Who is the publisher?",
-    a: "Your book is published under James Hemingway of Shreem Books, our dedicated nonfiction imprint. We do not pitch your book to traditional houses. Instead, we build your author platform so you own the asset, the audience, and the revenue. You retain 100% of rights and royalties."
+    a: "Your book is published under James Hemingway of Shreem Books, our dedicated nonfiction imprint. We do not pitch your book to traditional houses. Instead, we build your author platform so you own the asset, the audience, and the revenue. You retain 100% of rights and royalties. View the complete Shreem Books catalogue."
   },
   {
     q: "Can I verify past authors?",
@@ -1282,6 +1317,13 @@ const FinalCTA = ({ onApply }) => (
             ? `${BOOKS.length} Books Forged · ${BOOKS.length} Authors Published`
             : "Cohort 1 in Production · Applications Open for Cohort 2"}
         </div>
+        <Link 
+          to="/shreem-books" 
+          className="mt-3 inline-flex items-center gap-2 text-[var(--ia-forest)] text-sm hover:text-[var(--ia-ink)] transition-colors duration-300"
+        >
+          <span className="text-[10px] tracking-[0.2em] uppercase">Shreem Books Catalogue</span>
+          <ArrowUpRight size={12} strokeWidth={1.3} />
+        </Link>
       </div>
     </div>
   </section>
