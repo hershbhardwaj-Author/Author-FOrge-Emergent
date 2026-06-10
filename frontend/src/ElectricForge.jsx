@@ -9,34 +9,7 @@ import {
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-/* ──────────────────────────────────────────────────────────────────────────────
-   Published Works Registry — populate as books ship
-   ─────────────────────────────────────────────────────────────────────────── */
 
-const BOOKS = [
-  {
-    title: "The Everest Inside",
-    author: "Anant Rao",
-    authorBio: "UBA Group, Advisor · Banker · Consultant · Fintech · Payments · Lending · Executive & Leadership Coach ICF (ACC) · Blockchain Technology Consultant · Ex Citi · Board Member",
-    authorPhoto: "/authors/anant-rao.jpg",
-    cohort: 1,
-    quote: "The editorial interrogation in Month Three changed everything I thought I knew about my own expertise.",
-    isbn: null,
-    cover: null,
-    link: null,
-  },
-  {
-    title: "The IMpossible Goals",
-    author: "Priya V Singh",
-    authorBio: "Founder — Impossible Goals Movement. For founders and CXOs ready for non-linear, impossible outcomes. Ex-Google, AWS, IBM.",
-    authorPhoto: "/authors/priya-singh.jpg",
-    cohort: 1,
-    quote: "The Forge didn't just help me write a book. It taught me to think like an author.",
-    isbn: null,
-    cover: null,
-    link: null,
-  },
-];
 
 /* ──────────────────────────────────────────────────────────────────────────────
    Editorial Ornament Components
