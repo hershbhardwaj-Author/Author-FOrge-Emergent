@@ -2,15 +2,11 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import {
-  X, Triangle, Users, Calendar, Video, Phone, Library,
-  FileText, BookOpen, Megaphone, Globe, ArrowRight, ArrowUpRight,
-  Check, Sparkles, Feather, Zap, Star, Quote, Flame
+  X, Triangle, Users, FileText, BookOpen, Megaphone, Globe,
+  ArrowRight, ArrowUpRight, Check, Feather, Flame
 } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
-const BOOKS = [];
-
-
 
 /* ──────────────────────────────────────────────────────────────────────────────
    Editorial Ornament Components
@@ -252,7 +248,6 @@ const CountdownSection = ({ onApply }) => {
       </div>
 
       <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
-        {/* Masthead */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-10 border-b hairline">
           <div>
             <img
@@ -278,7 +273,6 @@ const CountdownSection = ({ onApply }) => {
           </button>
         </div>
 
-        {/* Countdown row */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 mt-16">
           <div>
             <FolioNumber n={1} />
@@ -342,7 +336,7 @@ const PHASES = [
   { n: "01", title: "The Architecture", tag: "Month 1", body: "Blueprint the foundation. We tear down your ideas and rebuild them into an unshakable structure.", accent: "bronze" },
   { n: "02", title: "The Writing Forge", tag: "Months 2 & 3", body: "This is where the fire gets hot. Intensive, relentless writing with rigorous editorial interrogation. You author every chapter. We challenge every assumption.", accent: "forest", icon: Flame },
   { n: "03", title: "Publishing Mechanics", tag: "Month 4", body: "We handle the technical execution. Typesetting, cover design, and publication under James Hemingway of Shreem Books. You retain full rights and royalties. See the Shreem Books catalogue.", accent: "ink", link: "/shreem-books" },
-  { n: "04", title: "The Publicity Engine", tag: "Month 5", body: "Launch preparation. We don't just release a book, we detonate it in your market.", accent: "forest-dark" },
+  { n: "04", title: "The Publicity Engine", tag: "Month 5", body: "Launch preparation. We engineer your launch so your market notices.", accent: "forest-dark" },
   { n: "05", title: "Beyond the Book", tag: "Ongoing", body: "Your book is a weapon. We teach you how to wield it to dominate your industry long-term.", accent: "bronze-soft" },
 ];
 
@@ -399,11 +393,6 @@ const JourneySection = () => (
                   <ArrowUpRight size={12} strokeWidth={1.3} />
                 </Link>
               )}
-              <div className={`mt-10 flex items-center gap-3 ${dark ? "text-[var(--ia-bronze)]" : "text-[var(--ia-ink-mute)]"}`}>
-                <span className="text-[10px] tracking-[0.4em] uppercase">Chapter {p.n}</span>
-                <span className="leader-dots" />
-                <ArrowUpRight size={14} strokeWidth={1.1} className="opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
             </article>
           );
         })}
@@ -489,8 +478,6 @@ const AuthorCovenantSection = () => (
   </section>
 );
 
-
-
 /* ──────────────────────────────────────────────────────────────────────────────
    Portfolio / Here's What Gets Built
    ─────────────────────────────────────────────────────────────────────────── */
@@ -506,80 +493,60 @@ const DELIVERABLES = [
     detail: "A named position in your category — the source of citation, invitation, and inbound that compounds for years." },
 ];
 
-const PortfolioSection = () => {
-  const [selected, setSelected] = useState(null);
-
-  return (
-    <section data-testid="section-portfolio" className="bg-[var(--ia-ink)] text-[var(--ia-ivory-warm)] border-b border-[var(--ia-forest-deep)]">
-      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 items-end pb-12 border-b border-white/10">
-          <div>
-            <FolioNumber n={5} />
-            <h2 className="mt-6 font-display text-[56px] sm:text-[88px] leading-[0.92]">
-              Here's what<br /><em className="font-display-italic text-[var(--ia-bronze)]">gets built.</em>
-            </h2>
-          </div>
-          <p className="text-lg sm:text-xl text-white/70 italic max-w-xl leading-relaxed">
-            We don't describe deliverables. We show you exactly what every author walks away with after 5 months.
-          </p>
+const PortfolioSection = () => (
+  <section data-testid="section-portfolio" className="bg-[var(--ia-ink)] text-[var(--ia-ivory-warm)] border-b border-[var(--ia-forest-deep)]">
+    <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 items-end pb-12 border-b border-white/10">
+        <div>
+          <FolioNumber n={5} />
+          <h2 className="mt-6 font-display text-[56px] sm:text-[88px] leading-[0.92]">
+            Here's what<br /><em className="font-display-italic text-[var(--ia-bronze)]">gets built.</em>
+          </h2>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-px gap-px bg-white/10 border border-white/10">
-          {DELIVERABLES.map((d, i) => {
-            const Icon = d.icon;
-            const isActive = selected === i;
-            return (
-              <button
-                key={d.tag}
-                onClick={() => setSelected(isActive ? null : i)}
-                data-testid={`deliverable-${i + 1}`}
-                className={`group relative text-left p-8 sm:p-10 flex flex-col gap-4 ${isActive ? "bg-[var(--ia-ivory-warm)] text-[var(--ia-ink)]" : "bg-[var(--ia-ink)] text-[var(--ia-ivory-warm)] hover:bg-[var(--ia-forest-deep)]"}`}
-              >
-                <div className="flex items-start justify-between">
-                  <span className={`text-[10px] tracking-[0.4em] uppercase ${isActive ? "text-[var(--ia-ink-mute)]" : "text-white/40"}`}>
-                    {d.tag}
-                  </span>
-                  <ArrowUpRight size={16} strokeWidth={1.1} className={`transition-transform duration-500 ${isActive ? "rotate-0" : "-rotate-45"} ${isActive ? "text-[var(--ia-bronze-deep)]" : "text-[var(--ia-bronze)]"}`} />
-                </div>
-                <Icon size={26} strokeWidth={1.1} className={isActive ? "text-[var(--ia-bronze-deep)]" : "text-[var(--ia-bronze)]"} />
-                <div className="font-display text-2xl sm:text-[28px] leading-tight mt-2">{d.title}</div>
-                <div className={`text-[10px] tracking-[0.4em] uppercase ${isActive ? "text-[var(--ia-ink-mute)]" : "text-white/40"}`}>
-                  {d.meta}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="border border-t-0 border-white/10 p-8 min-h-[120px] flex items-center">
-          {selected === null ? (
-            <div className="w-full text-center font-display-italic text-2xl text-white/30">
-              Select a deliverable to inspect it
-            </div>
-          ) : (
-            <div className="block-fade flex flex-col sm:flex-row sm:items-center gap-6 w-full">
-              <span className="eyebrow text-[var(--ia-bronze)] shrink-0">{DELIVERABLES[selected].tag}</span>
-              <div className="flex-1">
-                <p className="text-white/80 leading-relaxed text-lg max-w-3xl">
-                  {DELIVERABLES[selected].detail}
-                </p>
-                {DELIVERABLES[selected].link && (
-                  <Link 
-                    to={DELIVERABLES[selected].link}
-                    className="mt-3 inline-flex items-center gap-2 text-[var(--ia-bronze)] text-sm hover:text-white transition-colors duration-300"
-                  >
-                    <span className="text-[10px] tracking-[0.2em] uppercase">View Catalogue</span>
-                    <ArrowUpRight size={12} strokeWidth={1.3} />
-                  </Link>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        <p className="text-lg sm:text-xl text-white/70 italic max-w-xl leading-relaxed">
+          We don't describe deliverables. We show you exactly what every author walks away with after 5 months.
+        </p>
       </div>
-    </section>
-  );
-};
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-px gap-px bg-white/10 border border-white/10">
+        {DELIVERABLES.map((d) => {
+          const Icon = d.icon;
+          return (
+            <div
+              key={d.tag}
+              data-testid={`deliverable-${d.tag}`}
+              className="group bg-[var(--ia-ink)] text-[var(--ia-ivory-warm)] p-8 sm:p-10 flex flex-col hover:bg-[var(--ia-forest-deep)] transition-colors duration-300"
+            >
+              <div className="flex items-start justify-between">
+                <span className="text-[10px] tracking-[0.4em] uppercase text-white/40">
+                  {d.tag}
+                </span>
+                <ArrowUpRight size={16} strokeWidth={1.1} className="text-[var(--ia-bronze)]" />
+              </div>
+              <Icon size={26} strokeWidth={1.1} className="text-[var(--ia-bronze)] mt-4" />
+              <div className="font-display text-2xl sm:text-[28px] leading-tight mt-4">{d.title}</div>
+              <div className="text-[10px] tracking-[0.4em] uppercase text-white/40 mt-3">
+                {d.meta}
+              </div>
+              <p className="text-white/80 leading-relaxed text-base mt-6 flex-1">
+                {d.detail}
+              </p>
+              {d.link && (
+                <Link
+                  to={d.link}
+                  className="mt-4 inline-flex items-center gap-2 text-[var(--ia-bronze)] text-sm hover:text-white transition-colors duration-300"
+                >
+                  <span className="text-[10px] tracking-[0.2em] uppercase">View Catalogue</span>
+                  <ArrowUpRight size={12} strokeWidth={1.3} />
+                </Link>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+);
 
 /* ──────────────────────────────────────────────────────────────────────────────
    The Imprint — Publisher transparency
@@ -636,7 +603,6 @@ const ImprintSection = () => (
             </p>
           </div>
 
-          {/* Chapter 04 — The Shreem Books Catalogue */}
           <div className="pt-8 border-t hairline">
             <h3 className="font-display text-2xl leading-tight mb-4">The Shreem Books Catalogue</h3>
             <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)] mb-8">
@@ -662,12 +628,8 @@ const ImprintSection = () => (
   </section>
 );
 
-
-
-
-
 /* ──────────────────────────────────────────────────────────────────────────────
-   Mentor Poster — placed above FAQ
+   Mentor Poster
    ─────────────────────────────────────────────────────────────────────────── */
 
 const MentorPosterSection = () => (
@@ -701,102 +663,6 @@ const MentorPosterSection = () => (
     </div>
   </section>
 );
-
-/* ──────────────────────────────────────────────────────────────────────────────
-   FAQ Section
-   ─────────────────────────────────────────────────────────────────────────── */
-
-const FAQS = [
-  {
-    q: "Will someone else write my book?",
-    a: "No. You write every chapter. We provide the architecture, the deadlines, the weekly masterclasses, and the editorial interrogation. The manuscript is yours because the intellectual labor is yours. This is executive education for authorship, not a done-for-you service."
-  },
-  {
-    q: "Who is the publisher?",
-    a: "Your book is published under James Hemingway of Shreem Books, our dedicated nonfiction imprint. We do not pitch your book to traditional houses. Instead, we build your author platform so you own the asset, the audience, and the revenue. You retain 100% of rights and royalties. View the complete Shreem Books catalogue."
-  },
-  {
-    q: "Can I verify past authors?",
-    a: "Yes. Every Forge book carries a registered ISBN and is listed in commercial distribution. The Library (№ 08) shows every published work with author acknowledgment excerpts. You are welcome to verify any title independently."
-  },
-  {
-    q: "Who actually writes the manuscript?",
-    a: "You do — every word. Our editorial team structures your thinking, challenges your arguments, and refines your prose through five months of intensive feedback. The voice, the ideas, and the authority on the page are entirely yours."
-  },
-  {
-    q: "What kind of expert is The Forge designed for?",
-    a: "The Forge is built for high-achieving professionals — consultants, executives, coaches, and domain specialists — who have a body of knowledge worth publishing and a business that a book would directly advance. We are not a general creative writing programme."
-  },
-  {
-    q: "Do I need writing experience?",
-    a: "No. Many of our authors have never written long-form before. What you need is deep expertise and the discipline to show up. Our editorial process is designed to extract and shape ideas from people who think clearly, not people who already write fluently."
-  },
-  {
-    q: "What is the weekly time commitment?",
-    a: "Plan for eight to twelve hours per week across writing, masterclasses, and editorial sessions. The residency is intensive by design — a published book in five months requires real investment. Authors who treat it as a side project do not finish on schedule."
-  },
-  {
-    q: "What does 'guaranteed publishing' mean?",
-    a: "Every author who completes the residency walks away with a finished, professionally typeset book — distributed in print and digital formats across major retail channels. There is no additional publishing fee beyond your residency investment."
-  },
-  {
-    q: "How are cohort spots allocated?",
-    a: "Each cohort is capped at ten to twelve authors. Spots are awarded by our editorial board based on the strength of your application — specifically your expertise, your book concept, and your readiness to commit. We do not operate a waitlist; when the cohort fills, applications close."
-  },
-  {
-    q: "What happens after the five months?",
-    a: "You receive a published book, a marketing blueprint, and ongoing access to The Author's Portal. The editorial relationship does not end at month five — we support your launch window and remain available for strategic counsel as your book begins to work in your market."
-  },
-  {
-    q: "What is the investment?",
-    a: "Residency pricing is shared during the application review. The Forge is a premium programme and priced accordingly. If you are accepted and the investment is not workable, we will tell you plainly rather than pressure you into a decision."
-  },
-];
-
-const FAQSection = () => {
-  const [open, setOpen] = useState(null);
-  return (
-    <section data-testid="section-faq" className="bg-[var(--ia-ivory-deep)] border-b hairline">
-      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-24 sm:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-16">
-          <div>
-            <FolioNumber n={9} />
-            <h2 className="mt-6 font-display text-[44px] sm:text-[64px] leading-[0.95]">
-              Frequently<br /><em className="font-display-italic text-[var(--ia-forest)]">asked.</em>
-            </h2>
-            <div className="mt-10 w-16"><RuleOrnament glyph="✦" /></div>
-          </div>
-          <div className="divide-y hairline">
-            {FAQS.map((item, i) => {
-              const isOpen = open === i;
-              return (
-                <div key={i} className="group">
-                  <button
-                    onClick={() => setOpen(isOpen ? null : i)}
-                    className="w-full flex items-start justify-between gap-8 py-7 text-left"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="font-display text-[20px] sm:text-[24px] leading-tight text-[var(--ia-ink)] group-hover:text-[var(--ia-forest)] transition-colors duration-300">
-                      {item.q}
-                    </span>
-                    <span className={`shrink-0 mt-1 w-6 h-6 border hairline rounded-full flex items-center justify-center text-[var(--ia-ink-mute)] transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`}>
-                      <ArrowUpRight size={12} strokeWidth={1.3} />
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="block-fade pb-8 pr-14">
-                      <p className="text-lg leading-relaxed text-[var(--ia-ink-soft)]">{item.a}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
 
 /* ──────────────────────────────────────────────────────────────────────────────
    Final CTA
@@ -835,7 +701,6 @@ const FinalCTA = ({ onApply }) => (
       <div className="mt-6 eyebrow">Applications reviewed within 48 hours</div>
     </div>
 
-    {/* Colophon */}
     <div className="max-w-[1480px] mx-auto mt-32 pt-10 border-t hairline grid grid-cols-1 sm:grid-cols-3 gap-8 text-sm text-[var(--ia-ink-mute)]">
       <div>
         <div className="font-display text-2xl text-[var(--ia-ink)]">The Author's Forge</div>
@@ -849,9 +714,7 @@ const FinalCTA = ({ onApply }) => (
         <Eyebrow>Established</Eyebrow>
         <div className="mt-3 font-display tabular text-2xl text-[var(--ia-ink)]">MMXXIV</div>
         <div className="mt-2 text-sm italic text-[var(--ia-ink-mute)]">
-          {BOOKS.length > 0
-            ? `${BOOKS.length} Books Forged · ${BOOKS.length} Authors Published`
-            : "Cohort 1 in Production · Applications Open for Cohort 2"}
+          By application only. Limited to 10–12 authors per cohort.
         </div>
         <Link 
           to="/shreem-books" 
@@ -866,9 +729,7 @@ const FinalCTA = ({ onApply }) => (
 );
 
 /* ──────────────────────────────────────────────────────────────────────────────
-   Lead Magnets — three editorial inserts at strategic inflection points.
-   Each has its own visual personality so they feel like tipped-in cards
-   in a print journal, not repeated forms.
+   Lead Magnets
    ─────────────────────────────────────────────────────────────────────────── */
 
 const useMagnetForm = (source) => {
@@ -893,7 +754,6 @@ const useMagnetForm = (source) => {
       setDone(msg);
       setEmail("");
       if (dl) {
-        // Auto-open the PDF in a new tab
         const fullUrl = `${process.env.REACT_APP_BACKEND_URL}${dl}`;
         window.open(fullUrl, "_blank", "noopener,noreferrer");
       }
@@ -911,9 +771,6 @@ const useMagnetForm = (source) => {
   return { email, setEmail, done, err, busy, submit };
 };
 
-/* Variant A — The Curriculum Brief
-   Placed between Journey and Decision. A slim full-width editorial ribbon
-   with rule-above / rule-below, inline email input. Reads as a print masthead inset. */
 const CurriculumBriefStrip = () => {
   const { email, setEmail, done, err, busy, submit } = useMagnetForm("curriculum-brief");
   return (
@@ -972,9 +829,6 @@ const CurriculumBriefStrip = () => {
   );
 };
 
-/* Variant B — The Specimen Page
-   Placed between Portfolio (deliverables) and Program. An asymmetric tipped-in
-   "card" that mimics a book specimen folio with serif drop-cap and rule. */
 const SpecimenCard = () => {
   const { email, setEmail, done, err, busy, submit } = useMagnetForm("specimen-page");
   return (
@@ -1047,7 +901,6 @@ export default function ElectricForge() {
   const [open, setOpen] = useState(false);
   const onApply = () => setOpen(true);
 
-  // Reveal-on-scroll for major sections
   const observerRef = useRef(null);
   useEffect(() => {
     const els = document.querySelectorAll(".reveal-in");
@@ -1066,12 +919,12 @@ export default function ElectricForge() {
       <div className="reveal-in"><CountdownSection onApply={onApply} /></div>
       <div className="reveal-in"><JourneySection /></div>
       <div className="reveal-in"><AuthorCovenantSection /></div>
-      <div className="reveal-in"><CurriculumBriefStrip /></div>
       <div className="reveal-in"><PortfolioSection /></div>
-      <div className="reveal-in"><SpecimenCard /></div>
       <div className="reveal-in"><ImprintSection /></div>
       <div className="reveal-in"><MentorPosterSection /></div>
       <div className="reveal-in"><FinalCTA onApply={onApply} /></div>
+      <div className="reveal-in"><CurriculumBriefStrip /></div>
+      <div className="reveal-in"><SpecimenCard /></div>
     </div>
   );
 }
