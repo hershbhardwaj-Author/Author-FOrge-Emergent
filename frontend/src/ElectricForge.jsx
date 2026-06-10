@@ -663,50 +663,7 @@ const ImprintSection = () => (
 );
 
 
-/* ──────────────────────────────────────────────────────────────────────────────
-   Author Readiness Check
-   ─────────────────────────────────────────────────────────────────────────── */
 
-const DiagnosticSection = ({ onApply }) => (
-  <section data-testid="section-diagnostic" className="bg-[var(--ia-ivory-warm)] border-b hairline">
-    <div className="max-w-[1480px] mx-auto grid grid-cols-1 lg:grid-cols-2">
-      <div className="border-b lg:border-b-0 lg:border-r hairline p-10 sm:p-16 lg:p-20 flex flex-col justify-center bg-[var(--ia-ivory-deep)]">
-        <Eyebrow className="text-[var(--ia-forest)]">Author Readiness Check</Eyebrow>
-        <h2 className="mt-8 font-display text-[64px] sm:text-[112px] leading-[0.88]">
-          Are you<br /><em className="font-display-italic text-[var(--ia-forest)]">ready</em><br />to write?
-        </h2>
-        <p className="mt-10 text-lg sm:text-xl text-[var(--ia-ink-soft)] max-w-md leading-relaxed">
-          Three questions. Sixty seconds. Find out exactly where you stand — and whether The Forge is the right move for you right now.
-        </p>
-      </div>
-
-      <div className="p-10 sm:p-16 lg:p-20 flex flex-col justify-center">
-        <ol className="space-y-10 mb-14">
-          {[
-            { n: "01", t: "Identify your expertise area", s: "What you know deeply" },
-            { n: "02", t: "Know your current progress", s: "Where you are right now" },
-            { n: "03", t: "Pinpoint your key obstacle", s: "What's blocking you today" },
-          ].map((step) => (
-            <li key={step.n} className="flex items-start gap-6">
-              <div className="font-display tabular text-3xl text-[var(--ia-bronze-deep)] shrink-0 w-12">{step.n}</div>
-              <div className="flex-1">
-                <div className="font-display text-2xl leading-tight">{step.t}</div>
-                <div className="mt-1 text-sm italic text-[var(--ia-ink-mute)]">{step.s}</div>
-              </div>
-              <span className="leader-dots hidden sm:block" />
-              <ArrowRight size={16} strokeWidth={1.1} className="text-[var(--ia-ink-mute)] mt-2" />
-            </li>
-          ))}
-        </ol>
-
-        <button data-testid="diagnostic-start" onClick={onApply} className="btn-primary w-full sm:w-auto self-start">
-          <span>Start the Assessment</span>
-          <ArrowRight size={14} strokeWidth={1.3} />
-        </button>
-      </div>
-    </div>
-  </section>
-);
 
 /* ──────────────────────────────────────────────────────────────────────────────
    The Library — Published Works & Social Proof
