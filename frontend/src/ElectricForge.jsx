@@ -1299,7 +1299,6 @@ export default function ElectricForge() {
       <div className="reveal-in"><JourneySection /></div>
       <div className="reveal-in"><AuthorCovenantSection /></div>
       <div className="reveal-in"><CurriculumBriefStrip /></div>
-      <div className="reveal-in"><DecisionSection /></div>
       <div className="reveal-in"><PortfolioSection /></div>
       <div className="reveal-in"><SpecimenCard /></div>
       <div className="reveal-in"><ImprintSection /></div>
@@ -1307,7 +1306,6 @@ export default function ElectricForge() {
       <div className="reveal-in"><DiagnosticSection onApply={onApply} /></div>
       <div className="reveal-in"><LibrarySection /></div>
       <div className="reveal-in"><MentorPosterSection /></div>
-      <div className="reveal-in"><FAQSection /></div>
       <div className="reveal-in"><FinalCTA onApply={onApply} /></div>
     </div>
   );
