@@ -661,53 +661,6 @@ const ImprintSection = () => (
   </section>
 );
 
-/* ──────────────────────────────────────────────────────────────────────────────
-   Program at a Glance
-   ─────────────────────────────────────────────────────────────────────────── */
-
-const STATS = [
-  { icon: Calendar, label: "Duration", value: "20 Weeks", sub: "5 Months" },
-  { icon: Users,    label: "Cohort Size", value: "10–12", sub: "Authors Max" },
-  { icon: Video,    label: "Touchpoints", value: "Weekly", sub: "Live Masterclass" },
-  { icon: Phone,    label: "Support", value: "Monthly", sub: "1:1 Strategy Call" },
-  { icon: Library,  label: "Resources", value: "Portal", sub: "Templates & Guides" },
-];
-
-const ProgramSection = () => (
-  <section data-testid="section-program" className="bg-[var(--ia-ivory)] py-24 sm:py-32 px-6 sm:px-12 lg:px-20 border-b hairline">
-    <div className="max-w-[1480px] mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-12 items-end pb-12 border-b hairline">
-        <div>
-          <FolioNumber n={7} />
-          <h2 className="mt-6 font-display text-[48px] sm:text-[80px] leading-[0.95]">
-            Program <em className="font-display-italic text-[var(--ia-forest)]">at a glance</em>
-          </h2>
-        </div>
-        <p className="text-lg text-[var(--ia-ink-mute)] italic max-w-2xl">
-          A structured five-month residency: weekly masterclasses, monthly strategy hours, a private members' portal, and end-to-end publishing execution.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 mt-12 gap-px bg-[var(--ia-rule)] border hairline">
-        {STATS.map((s, i) => {
-          const Icon = s.icon;
-          return (
-            <div
-              key={s.label}
-              data-testid={`card-stat-${i + 1}`}
-              className="group p-8 sm:p-10 bg-[var(--ia-ivory-warm)] hover:bg-[var(--ia-forest)] hover:text-[var(--ia-ivory-warm)] flex flex-col"
-            >
-              <Icon size={22} strokeWidth={1.1} className="text-[var(--ia-bronze-deep)] group-hover:text-[var(--ia-bronze)]" />
-              <div className="mt-8 eyebrow group-hover:text-[var(--ia-bronze)]">{s.label}</div>
-              <div className="mt-3 font-display text-[40px] leading-none">{s.value}</div>
-              <div className="mt-3 text-sm italic text-[var(--ia-ink-mute)] group-hover:text-white/70">{s.sub}</div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  </section>
-);
 
 /* ──────────────────────────────────────────────────────────────────────────────
    Author Readiness Check
@@ -1302,7 +1255,6 @@ export default function ElectricForge() {
       <div className="reveal-in"><PortfolioSection /></div>
       <div className="reveal-in"><SpecimenCard /></div>
       <div className="reveal-in"><ImprintSection /></div>
-      <div className="reveal-in"><ProgramSection /></div>
       <div className="reveal-in"><DiagnosticSection onApply={onApply} /></div>
       <div className="reveal-in"><LibrarySection /></div>
       <div className="reveal-in"><MentorPosterSection /></div>
