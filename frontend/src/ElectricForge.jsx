@@ -196,8 +196,8 @@ const Field = ({ label, htmlFor, optional, children }) => (
 
 const Marquee = () => {
   const items = [
-    "20 Weeks", "10–12 Authors Max", "Weekly Editorial Sessions",
-    "1:1 Monthly Strategy Call", "Your Private Manuscript Room",
+    "20 Weeks", "10–12 Authors Max", "Weekly Live Masterclass",
+    "1:1 Monthly Strategy Call", "The Author's Portal",
     "Guaranteed Publishing", "Marketing Blueprint", "World-Class Execution"
   ];
   const sequence = [...items, ...items];
@@ -263,7 +263,7 @@ const CountdownSection = ({ onApply }) => {
             <div className="mt-6 max-w-xl">
               <div className="h-px w-16 bg-[var(--ia-rule)] mb-4" />
               <p className="text-lg sm:text-xl text-[var(--ia-ink-mute)] italic leading-relaxed">
-                Every word originates from your expertise. Our editorial team handles the architecture, sequencing, and heavy lifting.. We architect the process that forges it into a book.
+                You write every word. We architect the process that forges it into a book.
               </p>
             </div>
           </div>
@@ -334,7 +334,7 @@ const CountdownSection = ({ onApply }) => {
 
 const PHASES = [
   { n: "01", title: "The Architecture", tag: "Month 1", body: "Blueprint the foundation. We tear down your ideas and rebuild them into an unshakable structure.", accent: "bronze" },
-  { n: "02", title: "The Writing Forge", tag: "Months 2 & 3", body: "This is where the fire gets hot. Structured creation cycles. We prepare the prompts, frameworks, and chapter briefs. You bring the expertise; we handle the rest. You author every chapter. We challenge every assumption.", accent: "forest", icon: Flame },
+  { n: "02", title: "The Writing Forge", tag: "Months 2 & 3", body: "This is where the fire gets hot. Intensive, relentless writing with rigorous editorial interrogation. You author every chapter. We challenge every assumption.", accent: "forest", icon: Flame },
   { n: "03", title: "Publishing Mechanics", tag: "Month 4", body: "We handle the technical execution. Typesetting, cover design, and publication under James Hemingway of Shreem Books. You retain full rights and royalties. See the Shreem Books catalogue.", accent: "ink", link: "/shreem-books" },
   { n: "04", title: "The Publicity Engine", tag: "Month 5", body: "Launch preparation. We engineer your launch so your market notices.", accent: "forest-dark" },
   { n: "05", title: "Beyond the Book", tag: "Ongoing", body: "Your book is a weapon. We teach you how to wield it to dominate your industry long-term.", accent: "bronze-soft" },
@@ -346,7 +346,7 @@ const JourneySection = () => (
       <div className="flex flex-col items-center text-center mb-20">
         <FolioNumber n={2} />
         <h2 className="mt-6 font-display text-[56px] sm:text-[88px] leading-[0.92]">
-          The 5-Month <em className="font-display-italic text-[var(--ia-forest)]">Residency</em>
+          The 5-Month <em className="font-display-italic text-[var(--ia-forest)]">Journey</em>
         </h2>
         <div className="mt-10 w-24"><RuleOrnament glyph="✦" /></div>
       </div>
