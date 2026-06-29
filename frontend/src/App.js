@@ -4,6 +4,7 @@ import ElectricForge from "./ElectricForge";
 import MentorPage from "./MentorPage";
 import InvestmentPage from "./InvestmentPage";
 import ShreemBooksGallery from './ShreemBooksGallery';
+import YoungAuthorsFellowship from "./YoungAuthorsFellowship";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/mentor" element={<MentorPage />} />
         <Route path="/investment" element={<InvestmentPage />} />
         <Route path="/shreem-books" element={<ShreemBooksGallery />} />
+        <Route path="/young-authors" element={<YoungAuthorsFellowship />} />
       </Routes>
     </Router>
   );
