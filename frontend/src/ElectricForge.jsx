@@ -325,49 +325,27 @@ const Marquee = () => {
 };
 
 /* ──────────────────────────────────────────────────────────────────────────────
-   Countdown Section
+   Cohort Books
    ─────────────────────────────────────────────────────────────────────────── */
 
 const CountdownSection = ({ onApply }) => {
-  const target = useMemo(() => {
-    const t = new Date();
-    t.setDate(t.getDate() + 18);
-    t.setHours(t.getHours() + 13, t.getMinutes() + 59, t.getSeconds() + 59);
-    return t.getTime();
-  }, []);
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  const diff = Math.max(0, target - now);
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins = Math.floor((diff % 3600000) / 60000);
-  const secs = Math.floor((diff % 60000) / 1000);
-
   return (
     <section id="hero" data-testid="section-countdown" className="bg-[var(--ia-ivory-warm)] border-b hairline">
+      {/* Top banner - updated */}
       <div className="bg-[var(--ia-forest)] text-[var(--ia-ivory-warm)] py-3 px-6 flex items-center justify-center gap-4 text-center">
         <Triangle size={11} strokeWidth={1.2} className="text-[var(--ia-bronze)]" />
-        <span className="eyebrow text-[var(--ia-ivory-warm)]">
-          Applications close when the cohort is full — 4 of 12 spots remaining
-        </span>
+        <span className="eyebrow text-[var(--ia-ivory-warm)]">Present Cohort — Books in Forge</span>
         <Triangle size={11} strokeWidth={1.2} className="text-[var(--ia-bronze)]" />
       </div>
 
-      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
+      <div className="max-w- mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
+        {/* Hero header - keep as is */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-10 border-b hairline">
           <div>
-            <img
-              src="/logo.png"
-              alt="The Author's Forge · Electric"
-              className="h-16 sm:h-20 w-auto mb-6 object-contain"
-            />
+            <img src="/logo.png" alt="The Author's Forge · Electric" className="h-16 sm:h-20 w-auto mb-6 object-contain" />
             <Eyebrow>The Author's Forge · Electric Cohort</Eyebrow>
-            <h1 className="mt-4 font-display text-[44px] sm:text-[62px] leading-[0.95]">
-              From idea to <em className="font-display-italic text-[var(--ia-forest)]">published author</em><br />
-              in five months.
+            <h1 className="mt-4 font-display text- sm:text- leading-[0.95]">
+              From idea to <em className="font-display-italic text-[var(--ia-forest)]">published author</em><br />in five months.
             </h1>
             <div className="mt-6 max-w-xl">
               <div className="h-px w-16 bg-[var(--ia-rule)] mb-4" />
@@ -377,59 +355,31 @@ const CountdownSection = ({ onApply }) => {
             </div>
           </div>
           <button onClick={onApply} data-testid="masthead-apply" className="btn-ghost shrink-0">
-            <span>Apply for the Forge</span>
-            <ArrowRight size={14} strokeWidth={1.3} />
+            <span>Apply for the Forge</span><ArrowRight size={14} strokeWidth={1.3} />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 mt-16">
-          <div>
+        {/* REPLACED: This was "Next cohort applications close in" countdown - now poster */}
+        <div className="mt-16">
+          <div className="flex flex-col items-center text-center">
             <FolioNumber n={1} />
-            <h2 className="mt-4 font-display text-[40px] sm:text-[56px] leading-[0.95]">
-              Next cohort <br /><em className="font-display-italic">applications close in</em>
+            <h2 className="mt-6 font-display text- sm:text- leading-[0.92]">
+              Present <em className="font-display-italic text-[var(--ia-forest)]">Cohort Books</em>
             </h2>
-
-            <div className="mt-10 grid grid-cols-4 gap-0 border-y hairline">
-              {[
-                { v: days,  l: "Days" },
-                { v: hours, l: "Hours" },
-                { v: mins,  l: "Mins" },
-                { v: secs,  l: "Secs" },
-              ].map((b, i) => (
-                <div key={b.l} className={`p-6 sm:p-8 flex flex-col items-center ${i < 3 ? "border-r hairline" : ""}`}>
-                  <span className="font-display tabular text-[44px] sm:text-[68px] leading-none text-[var(--ia-ink)]">
-                    {String(b.v).padStart(2, "0")}
-                  </span>
-                  <span className="eyebrow mt-3">{b.l}</span>
-                </div>
-              ))}
-            </div>
+            <p className="mt-4 text-lg text-[var(--ia-ink-mute)] italic">Three ideas. Three authors. Three books taking shape.</p>
+            <div className="mt-10 w-24"><RuleOrnament glyph="✦" /></div>
           </div>
 
-          <div className="lg:pl-12 lg:border-l hairline flex flex-col justify-center">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Users size={14} strokeWidth={1.3} className="text-[var(--ia-forest)]" />
-                <Eyebrow>Cohort Capacity</Eyebrow>
-              </div>
-              <div className="font-display text-[44px] leading-none text-[var(--ia-forest)]">
-                8<span className="text-[var(--ia-ink-mute)]">/</span>12
-              </div>
-            </div>
-
-            <div className="mt-6 h-[2px] w-full bg-[var(--ia-rule)] relative overflow-hidden">
-              <div className="h-full bg-[var(--ia-forest)] transition-all duration-1000" style={{ width: "66.6667%" }} />
-            </div>
-
-            <div className="mt-6 grid gap-[3px]" style={{ gridTemplateColumns: "repeat(12, 1fr)" }}>
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className={`h-3 border hairline ${i < 8 ? "bg-[var(--ia-forest)] border-[var(--ia-forest)]" : ""}`} />
-              ))}
-            </div>
-
-            <p className="mt-8 text-sm text-[var(--ia-ink-mute)] italic max-w-md">
-              We do not waitlist. When the cohort fills, applications close.
-            </p>
+          <div className="mt-12 border hairline p-2 sm:p-3 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+            <picture>
+              <source srcSet="/cohort-books-poster.webp" type="image/webp" />
+              <img
+                src="/cohort-books-poster.jpg"
+                alt="Books in the Forge - The Everest Inside, The Impossible Goals, Nine Steps to Five"
+                className="w-full h-auto object-contain"
+                loading="lazy"
+              />
+            </picture>
           </div>
         </div>
       </div>
