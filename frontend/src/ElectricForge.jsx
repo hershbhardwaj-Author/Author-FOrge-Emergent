@@ -325,26 +325,24 @@ const Marquee = () => {
 };
 
 /* ──────────────────────────────────────────────────────────────────────────────
-   Cohort Books
+   Cohort Books - FIXED VERSION
    ─────────────────────────────────────────────────────────────────────────── */
 
 const CountdownSection = ({ onApply }) => {
   return (
     <section id="hero" data-testid="section-countdown" className="bg-[var(--ia-ivory-warm)] border-b hairline">
-      {/* Top banner - updated */}
       <div className="bg-[var(--ia-forest)] text-[var(--ia-ivory-warm)] py-3 px-6 flex items-center justify-center gap-4 text-center">
         <Triangle size={11} strokeWidth={1.2} className="text-[var(--ia-bronze)]" />
         <span className="eyebrow text-[var(--ia-ivory-warm)]">Present Cohort — Books in Forge</span>
         <Triangle size={11} strokeWidth={1.2} className="text-[var(--ia-bronze)]" />
       </div>
 
-      <div className="max-w- mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
-        {/* Hero header - keep as is */}
+      <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-10 border-b hairline">
           <div>
             <img src="/logo.png" alt="The Author's Forge · Electric" className="h-16 sm:h-20 w-auto mb-6 object-contain" />
             <Eyebrow>The Author's Forge · Electric Cohort</Eyebrow>
-            <h1 className="mt-4 font-display text- sm:text- leading-[0.95]">
+            <h1 className="mt-4 font-display text-[44px] sm:text-[62px] leading-[0.95]">
               From idea to <em className="font-display-italic text-[var(--ia-forest)]">published author</em><br />in five months.
             </h1>
             <div className="mt-6 max-w-xl">
@@ -359,11 +357,10 @@ const CountdownSection = ({ onApply }) => {
           </button>
         </div>
 
-        {/* REPLACED: This was "Next cohort applications close in" countdown - now poster */}
         <div className="mt-16">
           <div className="flex flex-col items-center text-center">
             <FolioNumber n={1} />
-            <h2 className="mt-6 font-display text- sm:text- leading-[0.92]">
+            <h2 className="mt-6 font-display text-[44px] sm:text-[64px] leading-[0.92]">
               Present <em className="font-display-italic text-[var(--ia-forest)]">Cohort Books</em>
             </h2>
             <p className="mt-4 text-lg text-[var(--ia-ink-mute)] italic">Three ideas. Three authors. Three books taking shape.</p>
@@ -800,7 +797,7 @@ const useMagnetForm = (source) => {
   const submit = async (e) => {
     e.preventDefault();
     const trimmed = email.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+\.[^\s@]+$/.test(trimmed)) {
       setErr("Please enter a valid email address.");
       return;
     }
