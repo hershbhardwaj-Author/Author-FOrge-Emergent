@@ -372,9 +372,9 @@ const CountdownSection = ({ onApply }) => {
 
           <div className="mt-12 border hairline p-2 sm:p-3 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
             <picture>
-              <source srcSet="/cohort-books-poster.webp" type="image/webp" />
+              <source srcSet="/cohort-books-poster-1200.webp" type="image/webp" />
               <img
-                src="/cohort-books-poster.jpg"
+                src="/cohort-books-poster-1200.webp"
                 alt="Books in the Forge - The Everest Inside, The Impossible Goals, Nine Steps to Five"
                 className="w-full h-auto object-contain"
                 loading="lazy"
