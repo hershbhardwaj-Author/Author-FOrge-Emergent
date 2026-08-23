@@ -340,8 +340,7 @@ const CountdownSection = ({ onApply }) => {
       <div className="max-w-[1480px] mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-10 border-b hairline">
           <div>
-            <img src="/logo.png" alt="The Author's Forge · Electric" className="h-16 sm:h-20 w-auto mb-6 object-contain" />
-            <Eyebrow>The Author's Forge · Electric Cohort</Eyebrow>
+            <Eyebrow>The Author's Forge · Expertise To Books</Eyebrow>
             <h1 className="mt-4 font-display text-[44px] sm:text-[62px] leading-[0.95]">
               From idea to <em className="font-display-italic text-[var(--ia-forest)]">published author</em><br />in five months.
             </h1>
@@ -363,7 +362,7 @@ const CountdownSection = ({ onApply }) => {
             <h2 className="mt-6 font-display text-[44px] sm:text-[64px] leading-[0.92]">
               Present <em className="font-display-italic text-[var(--ia-forest)]">Cohort Books</em>
             </h2>
-            <p className="mt-4 text-lg text-[var(--ia-ink-mute)] italic">Three ideas. Three authors. Three books taking shape.</p>
+            <p className="mt-4 text-lg text-[var(--ia-ink-mute)] italic"> Ideas in Final Stages. (Covers are WIP) .</p>
             <div className="mt-10 w-24"><RuleOrnament glyph="✦" /></div>
           </div>
 
