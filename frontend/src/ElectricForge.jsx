@@ -347,10 +347,14 @@ const CountdownSection = ({ onApply }) => {
             <div className="mt-6 max-w-xl">
               <div className="h-px w-16 bg-[var(--ia-rule)] mb-4" />
               <p className="text-lg sm:text-xl text-[var(--ia-ink-mute)] italic leading-relaxed">
-                You have spent decades building your expertise.</p>
-<p Now turn what you have learned into the book only you can write.</p>
-<p A personally guided 20-week experience to extract, structure and shape your experience into a complete manuscript</p> <p — without handing your story to a ghostwriter.
-              </p>
+  You have spent decades building your expertise.
+</p>
+<p className="text-lg sm:text-xl text-[var(--ia-ink-mute)] italic leading-relaxed mt-2">
+  Now turn what you have learned into the book only you can write.
+</p>
+<p className="text-lg sm:text-xl text-[var(--ia-ink-mute)] italic leading-relaxed mt-2">
+  A personally guided 20-week experience to extract, structure and shape your experience into a complete manuscript — without handing your story to a ghostwriter.
+</p>
             </div>
           </div>
           <button onClick={onApply} data-testid="masthead-apply" className="btn-ghost shrink-0">
