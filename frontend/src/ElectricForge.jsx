@@ -303,24 +303,20 @@ const Field = ({ label, htmlFor, optional, children }) => (
    Beyond The Mountain — Hero
    ─────────────────────────────────────────────────────────────────────────── */
 
+/* ──────────────────────────────────────────────────────────────────────────────
+   Beyond The Mountain — Hero
+   ─────────────────────────────────────────────────────────────────────────── */
+
 const BeyondTheMountainHero = () => (
   <section data-testid="section-beyond-mountain" className="relative">
-    {/* Image Header */}
+    {/* Image Header — no text overlay, image has title baked in */}
     <div className="relative w-full h-[70vh] min-h-[520px] max-h-[800px] overflow-hidden">
       <img
         src="/beyond-the-mountain-hero.png"
         alt="Beyond the Mountain — A journey from success to understanding"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-[var(--ia-ink)]/40" />
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-        <h1 className="font-display text-[48px] sm:text-[72px] lg:text-[96px] leading-[0.92] text-white tracking-[0.04em]">
-          BEYOND<br />THE MOUNTAIN
-        </h1>
-        <p className="mt-6 text-[11px] sm:text-[13px] tracking-[0.35em] uppercase text-[var(--ia-bronze)]">
-          The Journey From Success To Understanding
-        </p>
-      </div>
+      <div className="absolute inset-0 bg-[var(--ia-ink)]/20" />
     </div>
 
     {/* Copy Section */}
